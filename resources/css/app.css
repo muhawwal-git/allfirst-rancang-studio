@@ -1,0 +1,119 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --color-crimson-50: #FFF1F2;
+    --color-crimson-100: #FFE4E6;
+    --color-crimson-200: #FECDD3;
+    --color-crimson-300: #FDA4AF;
+    --color-crimson-400: #FB7185;
+    --color-crimson-500: #F43F5E;
+    --color-crimson-600: #E11D48;
+    --color-crimson-700: #D11F2E;
+    --color-crimson-800: #9E111B;
+    --color-crimson-900: #700B13;
+
+    --color-studio-crimson: #D11F2E;
+    --color-studio-crimson-dark: #9E111B;
+}
+
+/* CAD Technical Grid Patterns */
+.bg-cad-grid-dark {
+    background-color: #0B0F19;
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.bg-cad-grid-dark-dense {
+    background-color: #080D1A;
+    background-image: 
+        linear-gradient(to right, rgba(209, 31, 46, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(209, 31, 46, 0.12) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 128px 128px, 128px 128px, 32px 32px, 32px 32px;
+}
+
+.bg-cad-grid-light {
+    background-color: #FFF7F7;
+    background-image: url('/images/bg-cad-grid-hero.png'), linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Kinetic Announcement Ribbon Animation */
+@keyframes ribbonMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-ribbon {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ribbonMarquee 28s linear infinite;
+}
+
+.animate-ribbon:hover {
+    animation-play-state: paused;
+}
+
+/* Dual-Row Testimonial Marquee Animations */
+@keyframes marqueeLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes marqueeRight {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+    display: flex;
+    width: max-content;
+    animation: marqueeLeft 36s linear infinite;
+}
+
+.animate-marquee-right {
+    display: flex;
+    width: max-content;
+    animation: marqueeRight 36s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+    animation-play-state: paused;
+}
+
+/* Glassmorphism & Utilities */
+.glass-dark {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-crimson {
+    background: linear-gradient(135deg, rgba(209, 31, 46, 0.12), rgba(158, 17, 27, 0.05));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(209, 31, 46, 0.25);
+}
+
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+.font-mono-code {
+    font-family: var(--font-mono);
+}
