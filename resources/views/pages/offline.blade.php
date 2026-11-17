@@ -43,6 +43,17 @@
                         </svg>
                         <span>Daftar via WhatsApp Sekarang</span>
                     </a>
+
+                    <a href="https://maps.app.goo.gl/T1YSXMVx7mrEcEq4A?g_st=iw"
+                       target="_blank"
+                       rel="noopener"
+                       class="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-[#0F172A] bg-white border border-[#CBD5E1] hover:bg-slate-50 shadow-sm transition-all">
+                        <svg class="w-4 h-4 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Petunjuk Lokasi Studio (Maps) &nearr;</span>
+                    </a>
                 </div>
             </div>
         </div>
