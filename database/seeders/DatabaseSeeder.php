@@ -35,14 +35,14 @@ class DatabaseSeeder extends Seeder
         PengaturanSitus::setValue('rekening_atas_nama', 'Allfirst Rancang Studio');
 
         User::query()->updateOrCreate(
-            ['email' => 'admin@allfirstrancang.id'],
+            ['email' => 'allfirst.go@gmail.com'],
             [
-                'name' => 'Admin Allfirst Studio',
+                'name' => 'Asrul (Admin Allfirst Studio)',
                 'nomor_whatsapp' => '6281234567890',
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
-                'status_profesi' => 'Instruktur / Pengelola Studio',
-                'instansi_asal' => 'Allfirst Rancang Studio',
+                'status_profesi' => 'Founder & Lead Instructor',
+                'instansi_asal' => 'Allfirst Rancang Studio Makassar',
                 'email_verified_at' => now(),
             ]
         );
