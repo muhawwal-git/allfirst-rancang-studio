@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             'Batch Tatap Muka Studio Sedang Berjalan (Sisa 4 Hari) ◆ Pendaftaran Batch Berikutnya Dibuka via WhatsApp ◆ E-Book Gratis Tersedia'
         );
         PengaturanSitus::setValue('running_text_aktif', '1');
-        PengaturanSitus::setValue('whatsapp_studio', '6281234567890');
+        PengaturanSitus::setValue('whatsapp_studio', '6285190367139');
         PengaturanSitus::setValue('rekening_bank', 'Bank Central Asia (BCA)');
         PengaturanSitus::setValue('rekening_nomor', '1234567890');
         PengaturanSitus::setValue('rekening_atas_nama', 'Allfirst Rancang Studio');
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'allfirst.go@gmail.com'],
             [
                 'name' => 'Asrul (Admin Allfirst Studio)',
-                'nomor_whatsapp' => '6281234567890',
+                'nomor_whatsapp' => '6285190367139',
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'status_profesi' => 'Founder & Lead Instructor',

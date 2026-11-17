@@ -34,7 +34,7 @@
                         <span>&darr;</span>
                     </a>
 
-                    <a href="https://wa.me/{{ config('allfirst.admin_whatsapp', '6282212345678') }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin mendaftar Pelatihan Tatap Muka di Studio.') }}"
+                    <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin mendaftar Pelatihan Tatap Muka di Studio.') }}"
                        target="_blank"
                        rel="noopener"
                        class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-semibold text-[#0F172A] bg-white border border-[#E2E8F0] hover:bg-slate-50 shadow-sm transition-all">
@@ -272,7 +272,7 @@
                 Konsultasikan target belajar dan jadwalkan sesi pelatihan studio Anda bersama tim instruktur praktisi kami.
             </p>
             <div class="pt-2">
-                <a href="https://wa.me/{{ config('allfirst.admin_whatsapp', '6282212345678') }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin konsultasi dan daftar Pelatihan Tatap Muka.') }}"
+                <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin konsultasi dan daftar Pelatihan Tatap Muka.') }}"
                    target="_blank"
                    rel="noopener"
                    class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md transition-all transform hover:-translate-y-0.5">

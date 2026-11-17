@@ -64,7 +64,7 @@
                     Tim admin Allfirst Rancang Studio siap membantu Anda melalui layanan WhatsApp resmi untuk informasi lebih lanjut.
                 </p>
                 <div class="pt-2">
-                    <a href="https://wa.me/{{ config('allfirst.admin_whatsapp', '6282212345678') }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin bertanya lebih lanjut mengenai kursus.') }}"
+                    <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin bertanya lebih lanjut mengenai kursus.') }}"
                        target="_blank"
                        rel="noopener"
                        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md transition-all">

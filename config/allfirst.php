@@ -28,7 +28,7 @@ return [
 
     'kategori_software' => ['AutoCAD', 'SketchUp', 'Revit', 'Lumion'],
 
-    'admin_whatsapp' => '6282212345678',
+    'admin_whatsapp' => '6285190367139',
 
     'bank_accounts' => [
         [

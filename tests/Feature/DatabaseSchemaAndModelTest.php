@@ -18,7 +18,7 @@ class DatabaseSchemaAndModelTest extends TestCase
     {
         $this->seed();
 
-        $admin = User::query()->where('email', 'admin@allfirstrancang.id')->firstOrFail();
+        $admin = User::query()->where('email', 'allfirst.go@gmail.com')->firstOrFail();
         $student = User::query()->where('email', 'budi@student.id')->firstOrFail();
 
         $this->assertTrue($admin->isAdmin());

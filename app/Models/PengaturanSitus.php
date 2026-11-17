@@ -63,6 +63,6 @@ class PengaturanSitus extends Model
             }
         }
 
-        return (string) config('allfirst.admin_whatsapp', '6282212345678');
+        return (string) config('allfirst.admin_whatsapp', '6285190367139');
     }
 }

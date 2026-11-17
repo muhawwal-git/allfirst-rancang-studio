@@ -149,7 +149,7 @@
                 </div>
 
                 <div class="shrink-0 w-full md:w-auto">
-                    <a href="https://wa.me/{{ config('allfirst.admin_whatsapp', '6282212345678') }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin konsultasi mengenai pendaftaran Pelatihan Tatap Muka (Offline).') }}"
+                    <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin konsultasi mengenai pendaftaran Pelatihan Tatap Muka (Offline).') }}"
                        target="_blank"
                        rel="noopener"
                        class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-[#0F172A] hover:bg-slate-800 shadow-sm transition-all">

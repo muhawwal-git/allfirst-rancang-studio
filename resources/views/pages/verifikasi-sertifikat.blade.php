@@ -98,7 +98,7 @@
                         </p>
                     </div>
                     <div class="pt-4">
-                        <a href="https://wa.me/6282212345678?text=Halo%20Admin%20Allfirst,%20saya%20ingin%20mengonfirmasi%20keaslian%20sertifikat%20dengan%20kode%20{{ urlencode($hash) }}"
+                        <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text=Halo%20Admin%20Allfirst,%20saya%20ingin%20mengonfirmasi%20keaslian%20sertifikat%20dengan%20kode%20{{ urlencode($hash) }}"
                            target="_blank" rel="noopener"
                            class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-mono font-bold uppercase bg-[#0F172A] hover:bg-[#1E293B] text-white transition-colors shadow-sm">
                             <span>Hubungi Admin Studio untuk Konfirmasi Manual</span>
