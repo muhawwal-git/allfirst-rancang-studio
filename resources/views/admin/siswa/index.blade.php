@@ -37,19 +37,19 @@
             </div>
 
             <div class="p-5 rounded-2xl bg-[#FFF1F2] border border-[#FECDD3] shadow-2xs space-y-1.5">
-                <span class="text-xs font-bold text-[#D11F2E] block">🏢 Siswa Offline Studio</span>
+                <span class="text-xs font-bold text-[#D11F2E] block">Siswa Offline Studio</span>
                 <div class="text-2xl font-extrabold font-mono text-[#D11F2E]">{{ $offlineCount }} Siswa</div>
                 <p class="text-[11px] text-[#9F1239]">Tatap muka Makassar (+ Bonus Online)</p>
             </div>
 
             <div class="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-2xs space-y-1.5">
-                <span class="text-xs font-semibold text-[#64748B] block">💻 Siswa Online LMS</span>
+                <span class="text-xs font-semibold text-[#64748B] block">Siswa Online LMS</span>
                 <div class="text-2xl font-extrabold font-mono text-[#0F172A]">{{ $onlineCount }} Siswa</div>
                 <p class="text-[11px] text-[#64748B]">Pembelajaran video mandiri</p>
             </div>
 
             <div class="p-5 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] shadow-2xs space-y-1.5">
-                <span class="text-xs font-bold text-[#047857] block">🎓 Alumni Bersertifikat</span>
+                <span class="text-xs font-bold text-[#047857] block">Alumni Bersertifikat</span>
                 <div class="text-2xl font-extrabold font-mono text-[#047857]">{{ $certifiedCount }} Sertifikat</div>
                 <p class="text-[11px] text-[#065F46]">Sertifikat resmi yang telah terbit</p>
             </div>
@@ -131,9 +131,9 @@
                 @php
                     $tabs = [
                         'semua' => 'Semua Siswa (' . $totalCount . ')',
-                        'offline' => '🏢 Siswa Offline Studio (' . $offlineCount . ')',
-                        'online' => '💻 Siswa Online LMS (' . $onlineCount . ')',
-                        'bersertifikat' => '🎓 Sudah Bersertifikat (' . $certifiedCount . ')',
+                        'offline' => 'Siswa Offline Studio (' . $offlineCount . ')',
+                        'online' => 'Siswa Online LMS (' . $onlineCount . ')',
+                        'bersertifikat' => 'Sudah Bersertifikat (' . $certifiedCount . ')',
                     ];
                 @endphp
                 @foreach($tabs as $key => $label)
@@ -227,11 +227,11 @@
                                     <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
                                         @if($isOffline)
                                             <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
-                                                🏢 OFFLINE STUDIO
+                                                OFFLINE STUDIO
                                             </span>
                                         @else
                                             <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
-                                                💻 ONLINE LMS
+                                                ONLINE LMS
                                             </span>
                                         @endif
                                         <span class="text-[10px] font-mono text-[#64748B]">
@@ -291,7 +291,7 @@
                                             <button type="button"
                                                     onclick="document.getElementById('modal-sertifikat-{{ $akses->id }}').classList.remove('hidden')"
                                                     class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all cursor-pointer">
-                                                <span>🎓 Terbitkan Sertifikat</span>
+                                                <span>Terbitkan Sertifikat</span>
                                             </button>
                                         @endif
                                     </div>
@@ -417,7 +417,7 @@
                         </button>
                         <button type="submit"
                                 class="px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm cursor-pointer">
-                            🎓 {{ $cert ? 'Simpan Perubahan Nilai' : 'Terbitkan Sertifikat Sekarang' }}
+                            {{ $cert ? 'Simpan Perubahan Nilai' : 'Terbitkan Sertifikat Sekarang' }}
                         </button>
                     </div>
                 </form>
@@ -509,8 +509,8 @@
                                 name="tipe_kelas"
                                 required
                                 class="w-full px-3.5 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
-                            <option value="offline">🏢 Kelas Offline Studio (+ Bonus Online)</option>
-                            <option value="online">💻 Kelas Online LMS</option>
+                            <option value="offline">Kelas Offline Studio (+ Bonus Online)</option>
+                            <option value="online">Kelas Online LMS</option>
                         </select>
                     </div>
 
