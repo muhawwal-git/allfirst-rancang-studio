@@ -15,9 +15,11 @@ use Illuminate\Support\Str;
     'judul_kelas',
     'slug',
     'kategori',
+    'jenis_kelas',
     'harga',
     'deskripsi',
     'manfaat',
+    'modul_offline',
     'gambar_sampul',
     'status_publikasi',
     'is_unggulan',
@@ -37,6 +39,7 @@ class Kelas extends Model
         return [
             'harga' => 'integer',
             'manfaat' => 'array',
+            'modul_offline' => 'array',
             'is_unggulan' => 'boolean',
         ];
     }
@@ -69,6 +72,21 @@ class Kelas extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status_publikasi', 'published');
+    }
+
+    public function scopeOnlineCatalog(Builder $query): Builder
+    {
+        return $query->where('jenis_kelas', 'online');
+    }
+
+    public function scopeOfflineCatalog(Builder $query): Builder
+    {
+        return $query->where('jenis_kelas', 'offline');
+    }
+
+    public function isOfflineCatalog(): bool
+    {
+        return ($this->attributes['jenis_kelas'] ?? 'online') === 'offline';
     }
 
     public function getJudulAttribute(): string

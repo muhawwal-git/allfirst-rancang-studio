@@ -58,12 +58,12 @@
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 sm:p-8 shadow-sm space-y-5">
                         <!-- Badges -->
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <span class="px-2.5 py-0.5 rounded-md text-xs font-medium text-[#334155] bg-[#F1F5F9] border border-[#E2E8F0]">
-                                {{ $kelas->kategori }}
+                                {{ $kelas->kategori }}{{ $kelas->isOfflineCatalog() ? ' Studio' : '' }}
                             </span>
                             <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold text-[#D11F2E] bg-[#FFF1F2] border border-[#FFE4E6]">
-                                Akses 1 Tahun
+                                {{ $kelas->isOfflineCatalog() ? 'Tatap Muka + Bonus Online' : 'Akses 1 Tahun' }}
                             </span>
                         </div>
 
@@ -78,15 +78,17 @@
                                 {{ $kelas->formatted_harga }}
                             </div>
                             <p class="text-xs text-[#64748B] leading-relaxed">
-                                Harga normal &middot; Hak akses video berlaku 365 hari terhitung sejak verifikasi pembayaran.
+                                {{ $kelas->isOfflineCatalog()
+                                    ? 'Investasi pelatihan tatap muka studio · Termasuk bonus akses kelas online terpilih selama 365 hari.'
+                                    : 'Harga normal · Hak akses video berlaku 365 hari terhitung sejak verifikasi pembayaran.' }}
                             </p>
                         </div>
 
                         <!-- Buttons Group -->
                         <div class="space-y-3 pt-2">
-                            <a href="{{ route('checkout.create', $kelas->slug) }}"
+                            <a href="{{ $kelas->isOfflineCatalog() ? route('checkout.create', ['kelas' => $kelas->slug, 'mode' => 'offline']) : route('checkout.create', $kelas->slug) }}"
                                class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md transition-all">
-                                <span>Beli Kelas Sekarang</span>
+                                <span>{{ $kelas->isOfflineCatalog() ? 'Daftar Kelas Offline Sekarang' : 'Beli Kelas Sekarang' }}</span>
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
@@ -251,16 +253,34 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="px-6 py-4 text-xs text-slate-400">
-                                    Belum ada video materi di modul ini.
+                                <div class="px-6 py-4 text-xs text-[#334155]">
+                                    {{ $kelas->isOfflineCatalog() ? 'Sesi praktik tatap muka & evaluasi gambar kerja langsung bersama instruktur di studio.' : 'Belum ada video materi di modul ini.' }}
                                 </div>
                             @endforelse
                         </div>
                     </div>
                 @empty
-                    <div class="bg-white rounded-2xl border border-[#E2E8F0] p-8 text-center text-slate-500">
-                        Silabus kurikulum sedang disusun oleh instruktur.
-                    </div>
+                    @if(!empty($kelas->modul_offline) && is_array($kelas->modul_offline))
+                        @foreach($kelas->modul_offline as $idx => $judulMod)
+                            <div class="bg-white rounded-2xl border border-[#F1F5F9] shadow-sm overflow-hidden">
+                                <div class="bg-[#F1F5F9] px-6 py-4 flex items-center justify-between">
+                                    <span class="text-sm sm:text-base font-bold font-heading text-[#0F172A]">
+                                        {{ str_starts_with(strtolower($judulMod), 'modul') ? $judulMod : 'Modul ' . ($idx + 1) . ': ' . $judulMod }}
+                                    </span>
+                                    <span class="text-xs font-mono text-[#D11F2E] uppercase font-semibold">
+                                        TATAP MUKA STUDIO
+                                    </span>
+                                </div>
+                                <div class="px-6 py-4 text-xs text-[#334155]">
+                                    Sesi praktik tatap muka &amp; evaluasi gambar kerja langsung bersama instruktur di studio.
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-8 text-center text-slate-500">
+                            Silabus kurikulum sedang disusun oleh instruktur.
+                        </div>
+                    @endif
                 @endforelse
             </div>
         </div>

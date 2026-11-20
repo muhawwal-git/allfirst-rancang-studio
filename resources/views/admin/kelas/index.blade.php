@@ -6,14 +6,47 @@
     <div class="space-y-6 w-full">
         <!-- Header Row (A-03: iboRY) -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h1 class="text-2xl sm:text-[28px] font-extrabold font-heading text-[#0F172A] tracking-tight">
-                Manajemen Kelas Online
-            </h1>
             <div>
-                <a href="{{ route('admin.kelas.create') }}"
+                <h1 class="text-2xl sm:text-[28px] font-extrabold font-heading text-[#0F172A] tracking-tight">
+                    Manajemen Kelas Online &amp; Offline
+                </h1>
+                <p class="text-xs text-[#64748B] mt-1">
+                    Kelola katalog kelas video online (LMS) maupun katalog program pelatihan tatap muka studio (Offline).
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="{{ route('admin.kelas.create', ['jenis' => 'offline']) }}"
+                   class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-semibold text-[#0F172A] bg-white hover:bg-slate-50 border border-[#CBD5E1] shadow-2xs transition-all">
+                    + Tambah Kelas Offline
+                </a>
+                <a href="{{ route('admin.kelas.create', ['jenis' => 'online']) }}"
                    class="inline-flex items-center px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
                     + Tambah Kelas Baru
                 </a>
+            </div>
+        </div>
+
+        <!-- Filter Bar Card (Konsisten dengan halaman Admin lain) -->
+        <div class="rounded-2xl bg-white border border-[#E2E8F0] px-5 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-2xs">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-[#0F172A] mr-1">Filter Katalog:</span>
+                @php
+                    $activeJenis = $currentJenis ?? 'semua';
+                    $tabs = [
+                        'semua' => 'Semua Katalog (' . ($totalCount ?? $courses->total()) . ')',
+                        'online' => 'Katalog Kelas Online (' . ($onlineCount ?? 0) . ')',
+                        'offline' => 'Katalog Kelas Offline Studio (' . ($offlineCount ?? 0) . ')',
+                    ];
+                @endphp
+                @foreach($tabs as $key => $label)
+                    <a href="{{ route('admin.kelas.index', ['jenis' => $key]) }}"
+                       class="px-3.5 py-1.5 rounded-full text-xs transition-all
+                           {{ $activeJenis === $key
+                               ? 'bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3] font-bold'
+                               : 'bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0] hover:bg-[#E2E8F0]/70 font-medium' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
             </div>
         </div>
 
@@ -34,8 +67,19 @@
                         @forelse($courses as $course)
                             <tr class="hover:bg-slate-50/70 transition-colors">
                                 <!-- 1. Judul Kelas -->
-                                <td class="px-6 py-4 font-bold text-[#0F172A] text-xs sm:text-[13px] max-w-[280px] leading-relaxed">
-                                    {{ $course->judul_kelas }}
+                                <td class="px-6 py-4 max-w-[280px] leading-relaxed">
+                                    <div class="font-bold text-[#0F172A] text-xs sm:text-[13px]">{{ $course->judul_kelas }}</div>
+                                    <div class="mt-1">
+                                        @if($course->isOfflineCatalog())
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                                                KATALOG OFFLINE STUDIO
+                                            </span>
+                                        @else
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
+                                                KATALOG ONLINE LMS
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
 
                                 <!-- 2. Kategori Software -->

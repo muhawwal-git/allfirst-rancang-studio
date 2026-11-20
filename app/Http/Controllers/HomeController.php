@@ -13,6 +13,7 @@ class HomeController extends Controller
     {
         $featuredCourses = Kelas::query()
             ->published()
+            ->onlineCatalog()
             ->orderByDesc('is_unggulan')
             ->orderBy('id')
             ->take(3)

@@ -20,6 +20,26 @@
 
                 <!-- Kolom Input Kiri (7 Cols) -->
                 <div class="lg:col-span-7 space-y-4">
+                    <!-- 0. Jenis Katalog Kelas (Online vs Offline Studio) -->
+                    @php
+                        $selectedJenis = old('jenis_kelas', $kelas->jenis_kelas ?? 'online');
+                        $existingModulText = is_array($kelas->modul_offline)
+                            ? implode("\n", $kelas->modul_offline)
+                            : $kelas->moduls->pluck('judul_modul')->implode("\n");
+                    @endphp
+                    <div class="space-y-1.5">
+                        <label for="jenis_kelas" class="block font-bold text-[#0F172A]">
+                            Jenis Katalog Kelas
+                        </label>
+                        <select id="jenis_kelas"
+                                name="jenis_kelas"
+                                onchange="document.getElementById('field-modul-offline').classList.toggle('hidden', this.value !== 'offline')"
+                                class="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] font-semibold text-[#0F172A] text-xs sm:text-[13px] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                            <option value="online" {{ $selectedJenis === 'online' ? 'selected' : '' }}>Katalog Kelas Online (Pembelajaran Video LMS)</option>
+                            <option value="offline" {{ $selectedJenis === 'offline' ? 'selected' : '' }}>Katalog Kelas Offline (Pelatihan Tatap Muka Studio)</option>
+                        </select>
+                    </div>
+
                     <!-- 1. Judul Kelas -->
                     <div class="space-y-1.5">
                         <label for="judul_kelas" class="block font-bold text-[#0F172A]">
@@ -82,13 +102,28 @@
                         </label>
                         <textarea id="deskripsi"
                                   name="deskripsi"
-                                  rows="5"
+                                  rows="4"
                                   required
                                   placeholder="Tuliskan gambaran kurikulum, target kompetensi siswa, dan manfaat yang didapatkan."
                                   class="w-full p-4 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] text-xs sm:text-[13px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">{{ old('deskripsi', $kelas->deskripsi) }}</textarea>
                         @error('deskripsi')
                             <p class="text-[#D11F2E] mt-1">&times; {{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <!-- 4b. Daftar Modul / Pokok Bahasan Kelas Offline (Tampil jika Kelas Offline) -->
+                    <div id="field-modul-offline" class="{{ $selectedJenis === 'offline' ? '' : 'hidden' }} space-y-1.5 rounded-xl bg-[#FFF1F2]/50 border border-[#FECDD3] p-4">
+                        <label for="modul_offline_text" class="block font-bold text-[#0F172A]">
+                            Daftar Modul / Pokok Bahasan Kelas Offline (1 Baris = 1 Modul)
+                        </label>
+                        <p class="text-[11px] text-[#64748B]">
+                            Tuliskan daftar modul atau materi yang akan dipelajari peserta di studio (pisahkan per baris). Anda juga dapat menambah detail sub-materi di menu <strong>Kelola Kurikulum</strong>.
+                        </p>
+                        <textarea id="modul_offline_text"
+                                  name="modul_offline_text"
+                                  rows="4"
+                                  placeholder="Modul 1: Pengenalan Interface & Standar Layer Konsultan&#10;Modul 2: Pembuatan Denah Arsitektur & Hirarki Garis DED&#10;Modul 3: Gambar Tampak, Potongan Struktural & Detail Konstruksi&#10;Modul 4: Manajemen Layout Etiket & Plotting Skala Presisi"
+                                  class="w-full p-3.5 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#94A3B8] text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">{{ old('modul_offline_text', $existingModulText) }}</textarea>
                     </div>
 
                     <!-- 5. Form Buttons -->

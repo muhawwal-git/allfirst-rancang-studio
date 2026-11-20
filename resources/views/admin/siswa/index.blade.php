@@ -489,7 +489,10 @@
                         </p>
 
                         <div class="space-y-2 max-h-60 overflow-y-auto pr-1 pt-1">
-                            @foreach($kelasList as $k)
+                            @php
+                                $onlineBonusOptions = $kelasList->where('jenis_kelas', 'online')->whenEmpty(fn () => $kelasList);
+                            @endphp
+                            @foreach($onlineBonusOptions as $k)
                                 @php
                                     $isChecked = in_array((int) $k->id, $activeKelasIds, true);
                                 @endphp
@@ -634,7 +637,10 @@
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                            @foreach($kelasList as $k)
+                            @php
+                                $onlineBonusOptions = $kelasList->where('jenis_kelas', 'online')->whenEmpty(fn () => $kelasList);
+                            @endphp
+                            @foreach($onlineBonusOptions as $k)
                                 <label class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] bg-white hover:border-[#D11F2E]/60 cursor-pointer transition-all"
                                        title="{{ $k->judul_kelas }}">
                                     <input type="checkbox"

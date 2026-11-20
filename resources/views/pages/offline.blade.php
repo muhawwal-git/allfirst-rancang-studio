@@ -147,59 +147,152 @@
         </div>
     </section>
 
-    <!-- SEKSI PENDAFTARAN LANGSUNG KELAS OFFLINE (+ BONUS AKSES KELAS ONLINE) -->
-    @if(isset($courses) && $courses->isNotEmpty())
+    <!-- SEKSI KATALOG & PENDAFTARAN KELAS OFFLINE STUDIO (+ BONUS AKSES KELAS ONLINE) -->
+    @if(isset($courses) && ($courses->isNotEmpty() || !empty($selectedCategory)))
         <section id="daftar-program-offline" class="bg-[#F8FAFC] py-14 sm:py-18 border-b border-[#E2E8F0]">
             <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div class="space-y-1.5">
                         <span class="text-xs font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
-                            PENDAFTARAN TERINTEGRASI &middot; OFFLINE + ONLINE
+                            KATALOG PELATIHAN STUDIO &middot; OFFLINE + BONUS ONLINE
                         </span>
                         <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-[#0F172A]">
-                            Daftar Kelas Offline &amp; Dapatkan Akses Kelas Online Gratis
+                            Katalog Kelas Offline &amp; Modul Tatap Muka Studio
                         </h2>
                         <p class="text-sm sm:text-base text-[#334155] max-w-3xl">
-                            Setiap peserta yang mendaftar program pelatihan tatap muka di studio secara otomatis mendapatkan <strong>hak akses penuh ke video pembelajaran Kelas Online selama 1 Tahun (365 Hari)</strong> begitu pembayaran diverifikasi.
+                            Pilih program pelatihan tatap muka di studio Makassar lengkap dengan modul silabus praktik dan dapatkan <strong>bonus akses kelas online selama 1 Tahun (365 Hari)</strong>.
                         </p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-                    @foreach($courses as $kelas)
-                        <div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between space-y-5">
-                            <div class="space-y-3">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold text-[#334155] bg-[#F1F5F9] border border-[#E2E8F0]">
-                                        {{ $kelas->kategori }} Studio
+                <!-- Filter Bar (Konsisten 100% dengan Katalog Kelas Online) -->
+                @if(!empty($categories))
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <span class="text-xs sm:text-sm font-semibold text-[#0F172A] mr-1">
+                            Filter Software:
+                        </span>
+
+                        <a href="{{ route('offline') }}#daftar-program-offline"
+                           class="px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all {{ empty($selectedCategory)
+                               ? 'bg-gradient-to-r from-[#D11F2E] to-[#9E111B] text-white border border-[#BA151C] shadow-sm font-semibold'
+                               : 'bg-white text-[#334155] border border-[#E2E8F0] hover:bg-slate-50' }}">
+                            Semua Software
+                        </a>
+
+                        @foreach($categories as $cat)
+                            <a href="{{ route('offline', ['kategori' => $cat]) }}#daftar-program-offline"
+                               class="px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all {{ ($selectedCategory ?? null) === $cat
+                                   ? 'bg-gradient-to-r from-[#D11F2E] to-[#9E111B] text-white border border-[#BA151C] shadow-sm font-semibold'
+                                   : 'bg-white text-[#334155] border border-[#E2E8F0] hover:bg-slate-50' }}">
+                                {{ $cat }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    @forelse($courses as $kelas)
+                        @php
+                            $modulItems = collect($kelas->modul_offline ?? [])
+                                ->whenEmpty(fn () => $kelas->moduls->pluck('judul_modul'))
+                                ->filter()
+                                ->values();
+                        @endphp
+                        <div class="bg-white rounded-2xl border border-[#F1F5F9] shadow-[0_10px_30px_-5px_rgba(15,23,42,0.05)] hover:shadow-[0_15px_35px_-5px_rgba(15,23,42,0.1)] transition-all duration-200 overflow-hidden flex flex-col justify-between group">
+                            <!-- 16:9 Thumbnail (Konsisten dengan Katalog Kelas Online) -->
+                            <div class="relative aspect-video w-full p-4 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#4C0519] border-b border-[#E2E8F0] flex flex-col justify-between overflow-hidden">
+                                @if($kelas->gambar_sampul && \Illuminate\Support\Facades\Storage::disk('public')->exists($kelas->gambar_sampul))
+                                    <img src="{{ asset('storage/' . $kelas->gambar_sampul) }}"
+                                         alt="{{ $kelas->judul }}"
+                                         class="absolute inset-0 w-full h-full object-cover opacity-55 group-hover:scale-105 transition-transform duration-300">
+                                @endif
+                                <div class="relative flex items-center justify-between">
+                                    <span class="px-2.5 py-1 rounded bg-[#1E293B]/90 text-[10px] font-mono text-[#E2E8F0] uppercase font-semibold">
+                                        {{ strtoupper($kelas->kategori) }} STUDIO
                                     </span>
-                                    <span class="px-2.5 py-0.5 rounded-md text-xs font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0]">
-                                        + Gratis Kelas Online 1 Tahun
-                                    </span>
+                                    <svg class="w-4 h-4 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                    </svg>
                                 </div>
 
-                                <h3 class="text-lg font-bold font-heading text-[#0F172A] leading-snug">
-                                    Pelatihan Studio: {{ $kelas->judul }}
-                                </h3>
-
-                                <p class="text-xs sm:text-sm text-[#64748B] line-clamp-2 leading-relaxed">
-                                    {{ $kelas->deskripsi_singkat }}
-                                </p>
+                                <div class="relative">
+                                    <span class="text-[11px] font-mono text-[#E2E8F0]">
+                                        TATAP MUKA STUDIO &middot; MAKASSAR
+                                    </span>
+                                </div>
                             </div>
 
-                            <div class="pt-4 border-t border-[#F1F5F9] flex items-center justify-between gap-4">
-                                <div>
-                                    <span class="text-[10px] font-mono text-[#64748B] uppercase block">Investasi Program</span>
-                                    <span class="text-lg font-extrabold font-mono text-[#0F172A]">{{ $kelas->formatted_harga }}</span>
+                            <!-- Card Body -->
+                            <div class="p-5 sm:p-6 space-y-4 flex-grow flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="px-2.5 py-0.5 rounded-md text-xs font-medium text-[#334155] bg-[#F1F5F9] border border-[#E2E8F0]">
+                                            {{ $kelas->kategori }} Studio
+                                        </span>
+                                        <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold text-[#D11F2E] bg-[#FFF1F2] border border-[#FFE4E6]">
+                                            + Bonus Kelas Online
+                                        </span>
+                                    </div>
+
+                                    <h3 class="text-lg font-bold font-heading text-[#0F172A] group-hover:text-[#D11F2E] transition-colors leading-snug">
+                                        <a href="{{ route('kelas.show', $kelas->slug) }}">
+                                            {{ $kelas->judul }}
+                                        </a>
+                                    </h3>
+
+                                    <p class="text-sm text-[#64748B] line-clamp-2 leading-relaxed">
+                                        {{ $kelas->deskripsi_singkat }}
+                                    </p>
+
+                                    @if($modulItems->isNotEmpty())
+                                        <div class="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-3 space-y-1.5">
+                                            <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
+                                                MODUL TATAP MUKA ({{ $modulItems->count() }} MODUL)
+                                            </span>
+                                            <ul class="space-y-1 text-xs text-[#334155]">
+                                                @foreach($modulItems->take(3) as $modTitle)
+                                                    <li class="flex items-start gap-1.5 truncate" title="{{ $modTitle }}">
+                                                        <span class="text-[#D11F2E] font-bold">&bull;</span>
+                                                        <span class="truncate">{{ $modTitle }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            @if($modulItems->count() > 3)
+                                                <a href="{{ route('kelas.show', $kelas->slug) }}" class="inline-block text-[11px] font-semibold text-[#D11F2E] hover:underline pt-0.5">
+                                                    + {{ $modulItems->count() - 3 }} modul lainnya &rarr;
+                                                </a>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
 
-                                <a href="{{ route('checkout.create', ['kelas' => $kelas->slug, 'mode' => 'offline']) }}"
-                                   class="px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all shrink-0">
-                                    Daftar Kelas Offline &rarr;
-                                </a>
+                                <div class="pt-4 border-t border-[#E2E8F0] flex items-center justify-between gap-3 mt-4">
+                                    <div>
+                                        <span class="text-[10px] font-mono text-[#64748B] uppercase block">Investasi Program</span>
+                                        <span class="text-lg font-bold font-mono text-[#0F172A]">{{ $kelas->formatted_harga }}</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        <a href="{{ route('kelas.show', $kelas->slug) }}"
+                                           class="px-3 py-2 rounded-lg text-xs font-semibold text-[#0F172A] bg-white border border-[#E2E8F0] hover:bg-slate-50 transition-colors">
+                                            Detail
+                                        </a>
+                                        <a href="{{ route('checkout.create', ['kelas' => $kelas->slug, 'mode' => 'offline']) }}"
+                                           class="px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
+                                            Daftar Offline &rarr;
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-[#E2E8F0] p-8">
+                            <p class="text-slate-500 font-medium">Belum ada program kelas offline untuk kategori software yang dipilih.</p>
+                            <a href="{{ route('offline') }}#daftar-program-offline" class="inline-block mt-3 text-sm text-[#D11F2E] font-semibold hover:underline">
+                                Tampilkan Semua Program Offline &rarr;
+                            </a>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>

@@ -12,22 +12,37 @@ use Illuminate\View\View;
 
 class AdminKelasController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $jenis = (string) $request->query('jenis', 'semua');
+
         $courses = Kelas::query()
             ->withCount(['moduls', 'materis', 'aksesKelas'])
+            ->when(in_array($jenis, ['online', 'offline'], true), fn ($q) => $q->where('jenis_kelas', $jenis))
             ->orderBy('id')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
+
+        $totalCount = Kelas::query()->count();
+        $onlineCount = Kelas::query()->where('jenis_kelas', 'online')->count();
+        $offlineCount = Kelas::query()->where('jenis_kelas', 'offline')->count();
 
         return view('admin.kelas.index', [
             'courses' => $courses,
+            'currentJenis' => $jenis,
+            'totalCount' => $totalCount,
+            'onlineCount' => $onlineCount,
+            'offlineCount' => $offlineCount,
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
+        $defaultJenis = $request->query('jenis') === 'offline' ? 'offline' : 'online';
+
         return view('admin.kelas.create', [
             'categories' => config('allfirst.kategori_software', []),
+            'defaultJenis' => $defaultJenis,
         ]);
     }
 
@@ -36,8 +51,10 @@ class AdminKelasController extends Controller
         $validated = $request->validate([
             'judul_kelas' => ['required', 'string', 'max:255'],
             'kategori' => ['required', 'string', 'max:50'],
+            'jenis_kelas' => ['nullable', 'string', 'in:online,offline'],
             'harga' => ['required', 'integer', 'min:0'],
             'deskripsi' => ['required', 'string'],
+            'modul_offline_text' => ['nullable', 'string'],
             'gambar_sampul' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status_publikasi' => ['required', 'in:published,draft'],
             'is_unggulan' => ['nullable'],
@@ -56,21 +73,47 @@ class AdminKelasController extends Controller
             $imagePath = $request->file('gambar_sampul')->store('sampul_kelas', 'public');
         }
 
-        Kelas::create([
-            'judul_kelas' => $validated['judul_kelas'],
-            'slug' => $slug,
-            'kategori' => $validated['kategori'],
-            'harga' => (int) $validated['harga'],
-            'deskripsi' => $validated['deskripsi'],
-            'manfaat' => [
+        $jenisKelas = $validated['jenis_kelas'] ?? 'online';
+        $modulOffline = collect(preg_split('/\r\n|\r|\n/', (string) ($validated['modul_offline_text'] ?? '')))
+            ->map(fn (string $line) => trim($line))
+            ->filter()
+            ->values()
+            ->all();
+
+        $manfaat = $jenisKelas === 'offline'
+            ? [
+                'Bimbingan Tatap Muka Intensif di Studio Makassar',
+                'Evaluasi Gambar Kerja & Praktik Proyek Langsung',
+                'Bonus Akses Kelas Online Terpilih & Sertifikat Resmi',
+            ]
+            : [
                 'Pembelajaran Mandiri Berbasis Video HD',
                 'Masa Aktif Akses Penuh 1 Tahun (365 Hari)',
                 'Sertifikat Kelulusan Digital Resmi Ber-QR Code',
-            ],
+            ];
+
+        $kelas = Kelas::create([
+            'judul_kelas' => $validated['judul_kelas'],
+            'slug' => $slug,
+            'kategori' => $validated['kategori'],
+            'jenis_kelas' => $jenisKelas,
+            'harga' => (int) $validated['harga'],
+            'deskripsi' => $validated['deskripsi'],
+            'manfaat' => $manfaat,
+            'modul_offline' => ! empty($modulOffline) ? $modulOffline : null,
             'gambar_sampul' => $imagePath,
             'status_publikasi' => $validated['status_publikasi'],
             'is_unggulan' => $request->has('is_unggulan'),
         ]);
+
+        if ($jenisKelas === 'offline' && ! empty($modulOffline)) {
+            foreach ($modulOffline as $idx => $judulModul) {
+                $kelas->moduls()->create([
+                    'judul_modul' => $judulModul,
+                    'nomor_urutan' => $idx + 1,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.kelas.index')
             ->with('success', 'Kelas baru berhasil ditambahkan.');
@@ -89,8 +132,10 @@ class AdminKelasController extends Controller
         $validated = $request->validate([
             'judul_kelas' => ['required', 'string', 'max:255'],
             'kategori' => ['required', 'string', 'max:50'],
+            'jenis_kelas' => ['nullable', 'string', 'in:online,offline'],
             'harga' => ['required', 'integer', 'min:0'],
             'deskripsi' => ['required', 'string'],
+            'modul_offline_text' => ['nullable', 'string'],
             'gambar_sampul' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status_publikasi' => ['required', 'in:published,draft'],
             'is_unggulan' => ['nullable'],
@@ -104,11 +149,22 @@ class AdminKelasController extends Controller
             $imagePath = $request->file('gambar_sampul')->store('sampul_kelas', 'public');
         }
 
+        $jenisKelas = $validated['jenis_kelas'] ?? ($kelas->jenis_kelas ?: 'online');
+        $modulOffline = $request->has('modul_offline_text')
+            ? collect(preg_split('/\r\n|\r|\n/', (string) ($validated['modul_offline_text'] ?? '')))
+                ->map(fn (string $line) => trim($line))
+                ->filter()
+                ->values()
+                ->all()
+            : $kelas->modul_offline;
+
         $kelas->update([
             'judul_kelas' => $validated['judul_kelas'],
             'kategori' => $validated['kategori'],
+            'jenis_kelas' => $jenisKelas,
             'harga' => (int) $validated['harga'],
             'deskripsi' => $validated['deskripsi'],
+            'modul_offline' => ! empty($modulOffline) ? $modulOffline : null,
             'gambar_sampul' => $imagePath,
             'status_publikasi' => $validated['status_publikasi'],
             'is_unggulan' => $request->has('is_unggulan'),

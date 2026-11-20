@@ -461,4 +461,48 @@ class AdminManagementTest extends TestCase
         $this->assertSame(95, $cert->nilai);
         $this->assertSame(sprintf('026-ARS%s-%s/MKS/%s', date('y'), date('m'), date('Y')), $cert->nomor_sertifikat);
     }
+
+    public function test_admin_can_create_offline_class_with_modules_and_render_in_offline_catalog(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $onlineClass = Kelas::factory()->published()->create([
+            'judul_kelas' => 'Video Online AutoCAD 2D',
+            'jenis_kelas' => 'online',
+        ]);
+
+        // 1. Admin creates an Offline Studio Class with module list
+        $this->actingAs($admin)->post(route('admin.kelas.store'), [
+            'judul_kelas' => 'Bimbingan Privat Tatap Muka Revit BIM Studio',
+            'kategori' => 'Revit',
+            'jenis_kelas' => 'offline',
+            'harga' => 1500000,
+            'deskripsi' => 'Program bimbingan teknis tatap muka intensif Revit BIM di studio Makassar.',
+            'modul_offline_text' => "Modul 1: Pemodelan Elemen Arsitektur BIM\nModul 2: Koordinasi Struktur & Jadwal BOQ",
+            'status_publikasi' => 'published',
+        ])->assertRedirect(route('admin.kelas.index'));
+
+        $offlineClass = Kelas::query()->where('jenis_kelas', 'offline')->firstOrFail();
+        $this->assertTrue($offlineClass->isOfflineCatalog());
+        $this->assertCount(2, $offlineClass->moduls);
+
+        // 2. Admin adds a sub-topic to Modul 1 without needing a YouTube video link
+        $firstModul = $offlineClass->moduls()->firstOrFail();
+        $this->actingAs($admin)->post(route('admin.modul.materi.store', $firstModul->id), [
+            'judul_materi' => 'Praktik Pembuatan Grid, Level, Dinding & Lantai Parameter',
+        ])->assertRedirect();
+
+        $this->assertSame(1, $firstModul->materis()->count());
+
+        // 3. Public /kelas-offline shows the offline class & its modules
+        $this->get(route('offline'))
+            ->assertOk()
+            ->assertSee('Bimbingan Privat Tatap Muka Revit BIM Studio')
+            ->assertSee('Modul 1: Pemodelan Elemen Arsitektur BIM');
+
+        // 4. Public /kelas-online shows only the online catalog class
+        $this->get(route('kelas.index'))
+            ->assertOk()
+            ->assertSee('Video Online AutoCAD 2D')
+            ->assertDontSee('Bimbingan Privat Tatap Muka Revit BIM Studio');
+    }
 }

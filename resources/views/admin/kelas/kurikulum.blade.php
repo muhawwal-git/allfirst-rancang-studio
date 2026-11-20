@@ -180,19 +180,24 @@
             @endforelse
         </div>
 
-        <!-- Bottom Form Tambah Video Pembelajaran Baru (YouTube Unlisted — A-04) -->
+        <!-- Bottom Form Tambah Materi / Video Pembelajaran Baru (A-04) -->
         @php
             $targetModul = $kelas->moduls->first();
+            $isOfflineClass = $kelas->isOfflineCatalog();
         @endphp
         @if($targetModul)
             <div class="rounded-2xl bg-white border border-[#E2E8F0] p-6 shadow-sm space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                         <h2 class="text-base font-extrabold font-heading text-[#0F172A]">
-                            Tambah Video Pembelajaran Baru (YouTube Unlisted)
+                            {{ $isOfflineClass ? 'Tambah Pokok Bahasan / Materi Pertemuan Studio' : 'Tambah Video Pembelajaran Baru (YouTube Unlisted)' }}
                         </h2>
                         <p class="text-xs text-[#64748B] mt-0.5">
-                            Tempel tautan video YouTube berstatus <strong>Tidak Publik (Unlisted)</strong> untuk hemat ruang server dan streaming lancar.
+                            @if($isOfflineClass)
+                                Tambahkan rincian pokok bahasan materi yang akan dipelajari siswa pada modul kelas offline tatap muka ini.
+                            @else
+                                Tempel tautan video YouTube berstatus <strong>Tidak Publik (Unlisted)</strong> untuk hemat ruang server dan streaming lancar.
+                            @endif
                         </p>
                     </div>
 
@@ -218,29 +223,30 @@
                       class="space-y-4 text-xs">
                     @csrf
 
-                    <!-- Row Input 1: Judul Video Materi, Durasi Video (MM:SS), Nomor Urutan Tampil -->
+                    <!-- Row Input 1: Judul Materi, Durasi/Sesi, Nomor Urutan Tampil -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                         <div class="md:col-span-7 space-y-1.5">
                             <label for="judul_materi" class="block font-bold text-[#0F172A]">
-                                Judul Video Materi
+                                {{ $isOfflineClass ? 'Judul Pokok Bahasan / Materi Tatap Muka' : 'Judul Video Materi' }}
                             </label>
                             <input type="text"
                                    id="judul_materi"
                                    name="judul_materi"
                                    required
-                                   placeholder="Masukkan judul materi spesifik video"
+                                   placeholder="{{ $isOfflineClass ? 'Contoh: Pembuatan Denah Arsitektur & Pengaturan Skala Gambar Kerja' : 'Masukkan judul materi spesifik video' }}"
                                    class="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                         </div>
 
                         <div class="md:col-span-3 space-y-1.5">
                             <label for="durasi_tampil" class="block font-bold text-[#0F172A]">
-                                Durasi Video (MM:SS)
+                                {{ $isOfflineClass ? 'Alokasi Sesi (Opsional)' : 'Durasi Video (MM:SS)' }}
                             </label>
                             <input type="text"
                                    id="durasi_tampil"
                                    name="durasi_tampil"
-                                   required
-                                   placeholder="contoh: 08:30"
+                                   {{ $isOfflineClass ? '' : 'required' }}
+                                   value="{{ $isOfflineClass ? 'Tatap Muka' : '' }}"
+                                   placeholder="{{ $isOfflineClass ? 'contoh: Sesi Studio' : 'contoh: 08:30' }}"
                                    class="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                         </div>
 
@@ -257,47 +263,55 @@
                         </div>
                     </div>
 
-                    <!-- Tautan YouTube Unlisted Input Group -->
-                    <div class="space-y-1.5">
-                        <label for="path_video" class="block font-bold text-[#0F172A]">
-                            Tautan / URL Video YouTube (Unlisted)
-                        </label>
-                        <div class="rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] p-4 space-y-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#D11F2E] flex items-center justify-center shrink-0">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                    </svg>
+                    @if(!$isOfflineClass)
+                        <!-- Tautan YouTube Unlisted Input Group -->
+                        <div class="space-y-1.5">
+                            <label for="path_video" class="block font-bold text-[#0F172A]">
+                                Tautan / URL Video YouTube (Unlisted)
+                            </label>
+                            <div class="rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] p-4 space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#D11F2E] flex items-center justify-center shrink-0">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="text"
+                                           id="path_video"
+                                           name="path_video"
+                                           required
+                                           placeholder="Contoh: https://youtu.be/dQw4w9WgXcQ atau https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                                           class="flex-1 px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                                 </div>
-                                <input type="text"
-                                       id="path_video"
-                                       name="path_video"
-                                       required
-                                       placeholder="Contoh: https://youtu.be/dQw4w9WgXcQ atau https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                                       class="flex-1 px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
-                            </div>
-                            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#64748B]">
-                                <span>YOUTUBE UNLISTED EMBED &middot; STREAMING HD 720p / 1080p &middot; TANPA BEBAN PENYIMPANAN VPS</span>
-                                <span class="text-[#047857] font-semibold">&check; Mendukung Smart Resume</span>
+                                <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#64748B]">
+                                    <span>YOUTUBE UNLISTED EMBED &middot; STREAMING HD 720p / 1080p &middot; TANPA BEBAN PENYIMPANAN VPS</span>
+                                    <span class="text-[#047857] font-semibold">&check; Mendukung Smart Resume</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     <!-- Bottom Bar -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-                        <label class="inline-flex items-center gap-2.5 cursor-pointer">
-                            <input type="checkbox"
-                                   name="cuplikan_gratis"
-                                   value="1"
-                                   class="w-4 h-4 rounded border-[#CBD5E1] text-[#BA151C] focus:ring-[#D11F2E]">
-                            <span class="text-xs font-medium text-[#0F172A]">
-                                Jadikan Cuplikan Preview Gratis (Dapat ditonton 20–30 detik oleh pengunjung publik)
+                        @if(!$isOfflineClass)
+                            <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox"
+                                       name="cuplikan_gratis"
+                                       value="1"
+                                       class="w-4 h-4 rounded border-[#CBD5E1] text-[#BA151C] focus:ring-[#D11F2E]">
+                                <span class="text-xs font-medium text-[#0F172A]">
+                                    Jadikan Cuplikan Preview Gratis (Dapat ditonton 20–30 detik oleh pengunjung publik)
+                                </span>
+                            </label>
+                        @else
+                            <span class="text-xs text-[#64748B]">
+                                Pokok bahasan ini akan ditampilkan sebagai silabus resmi pada halaman Katalog Kelas Offline.
                             </span>
-                        </label>
+                        @endif
 
                         <button type="submit"
                                 class="px-6 py-3 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all shrink-0">
-                            Simpan Video ke Kurikulum
+                            {{ $isOfflineClass ? 'Simpan Pokok Bahasan ke Modul' : 'Simpan Video ke Kurikulum' }}
                         </button>
                     </div>
                 </form>

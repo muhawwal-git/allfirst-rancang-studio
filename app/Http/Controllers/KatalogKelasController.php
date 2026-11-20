@@ -17,6 +17,7 @@ class KatalogKelasController extends Controller
 
         $courses = Kelas::query()
             ->published()
+            ->onlineCatalog()
             ->when($selectedCategory, fn ($query, string $category) => $query->where('kategori', $category))
             ->orderByDesc('is_unggulan')
             ->orderBy('id')
