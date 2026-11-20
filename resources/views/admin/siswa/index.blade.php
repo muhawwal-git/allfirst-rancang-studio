@@ -167,18 +167,17 @@
             </form>
         </div>
 
-        <!-- Tabel Data Siswa & Sertifikat -->
+        <!-- Tabel Data Siswa & Sertifikat (5 Kolom Proporsional) -->
         <div class="rounded-2xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-[#F1F5F9] text-[#334155] border-b border-[#E2E8F0] font-bold">
                         <tr>
-                            <th class="px-6 py-4">Nama &amp; Profil Siswa</th>
-                            <th class="px-6 py-4">Kontak (WA &amp; Email)</th>
-                            <th class="px-6 py-4">Kelas &amp; Tipe Belajar</th>
-                            <th class="px-6 py-4">Progress Materi Web</th>
-                            <th class="px-6 py-4">Status Sertifikat &amp; Predikat</th>
-                            <th class="px-6 py-4">Tindakan Sertifikat</th>
+                            <th class="px-5 py-3.5">Data Siswa &amp; Kontak</th>
+                            <th class="px-5 py-3.5">Program Kelas</th>
+                            <th class="px-5 py-3.5">Progress</th>
+                            <th class="px-5 py-3.5">Sertifikat &amp; Predikat</th>
+                            <th class="px-5 py-3.5 text-right">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#E2E8F0]">
@@ -193,45 +192,42 @@
                                 if (str_starts_with($waClean, '0')) {
                                     $waClean = '62' . substr($waClean, 1);
                                 }
+                                $profilText = ($student->status_profesi ?? 'Peserta Pelatihan') . ($student->instansi_asal ? ' · ' . $student->instansi_asal : '');
                             @endphp
                             <tr class="hover:bg-slate-50/70 transition-colors">
-                                <!-- 1. Nama & Profil Siswa -->
-                                <td class="px-6 py-4">
-                                    <div class="font-bold text-[#0F172A] text-[13px]">{{ $student->name }}</div>
-                                    <div class="text-[11px] text-[#64748B] mt-0.5">
-                                        {{ $student->status_profesi ?? 'Peserta Pelatihan' }}
-                                        @if($student->instansi_asal)
-                                            &middot; {{ $student->instansi_asal }}
+                                <!-- 1. Data Siswa & Kontak -->
+                                <td class="px-5 py-3.5">
+                                    <div class="font-bold text-[#0F172A] text-[13px] leading-snug">{{ $student->name }}</div>
+                                    <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5 text-[11px] font-mono">
+                                        <span class="text-[#334155]">{{ $student->email }}</span>
+                                        @if($student->nomor_whatsapp)
+                                            <span class="text-[#CBD5E1]">&middot;</span>
+                                            <a href="https://wa.me/{{ $waClean }}"
+                                               target="_blank"
+                                               rel="noopener"
+                                               class="font-bold text-[#047857] hover:underline">
+                                                WA: {{ $student->nomor_whatsapp }} &nearr;
+                                            </a>
                                         @endif
+                                    </div>
+                                    <div class="text-[11px] text-[#64748B] truncate max-w-[240px] mt-0.5" title="{{ $profilText }}">
+                                        {{ $profilText }}
                                     </div>
                                 </td>
 
-                                <!-- 2. Kontak -->
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-[#334155] font-mono text-[11px]">{{ $student->email }}</div>
-                                    @if($student->nomor_whatsapp)
-                                        <a href="https://wa.me/{{ $waClean }}"
-                                           target="_blank"
-                                           rel="noopener"
-                                           class="inline-flex items-center gap-1 mt-1 text-[11px] font-mono font-bold text-[#047857] hover:underline">
-                                            <span>WA: {{ $student->nomor_whatsapp }} &nearr;</span>
-                                        </a>
-                                    @else
-                                        <span class="text-[11px] text-[#94A3B8] italic">WA belum diisi</span>
-                                    @endif
-                                </td>
-
-                                <!-- 3. Kelas & Tipe Belajar -->
-                                <td class="px-6 py-4 max-w-[260px]">
-                                    <div class="font-bold text-[#0F172A] leading-snug">{{ $kelas->judul_kelas }}</div>
-                                    <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
+                                <!-- 2. Program Kelas -->
+                                <td class="px-5 py-3.5 max-w-[240px]">
+                                    <div class="font-bold text-[#0F172A] leading-snug truncate" title="{{ $kelas->judul_kelas }}">
+                                        {{ $kelas->judul_kelas }}
+                                    </div>
+                                    <div class="flex items-center gap-1.5 mt-1 whitespace-nowrap">
                                         @if($isOffline)
-                                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
                                                 OFFLINE STUDIO
                                             </span>
                                             @if($akses->status_akses === 'nonaktif')
-                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F8FAFC] text-[#64748B] border border-[#CBD5E1]">
-                                                    TANPA BONUS ONLINE
+                                                <span class="text-[10px] font-mono text-[#64748B]">
+                                                    Tanpa Bonus Online
                                                 </span>
                                             @else
                                                 <span class="text-[10px] font-mono text-[#64748B]">
@@ -239,7 +235,7 @@
                                                 </span>
                                             @endif
                                         @else
-                                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
                                                 ONLINE LMS
                                             </span>
                                             <span class="text-[10px] font-mono text-[#64748B]">
@@ -249,57 +245,52 @@
                                     </div>
                                 </td>
 
-                                <!-- 4. Progress Materi Web -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- 3. Progress -->
+                                <td class="px-5 py-3.5 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-20 h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+                                        <div class="w-16 h-2 bg-[#E2E8F0] rounded-full overflow-hidden shrink-0">
                                             <div class="h-full rounded-full {{ $progress >= 100 ? 'bg-[#10B981]' : 'bg-[#D11F2E]' }}"
                                                  style="width: {{ min(100, $progress) }}%"></div>
                                         </div>
                                         <span class="font-mono font-bold text-[#0F172A]">{{ $progress }}%</span>
                                     </div>
-                                    @if($isOffline)
-                                        <span class="text-[10px] text-[#64748B] block mt-1">
-                                            Tatap muka studio (Video opsional)
-                                        </span>
-                                    @endif
                                 </td>
 
-                                <!-- 5. Status Sertifikat & Predikat -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- 4. Sertifikat & Predikat -->
+                                <td class="px-5 py-3.5 whitespace-nowrap">
                                     @if($cert)
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
                                             ✓ {{ $cert->nomor_sertifikat }}
                                         </span>
-                                        <div class="text-[11px] font-semibold text-[#0F172A] mt-1">
+                                        <div class="text-[11px] font-semibold text-[#0F172A] mt-0.5">
                                             Predikat: <span class="text-[#D11F2E] font-bold">{{ $cert->predikat ?? 'Baik' }}</span>
                                             <span class="font-mono text-[#64748B]">({{ $cert->nilai ?? 80 }})</span>
                                         </div>
                                     @else
-                                        <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#CBD5E1]">
+                                        <span class="inline-flex px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#CBD5E1]">
                                             Belum Terbit
                                         </span>
                                     @endif
                                 </td>
 
-                                <!-- 6. Tindakan Sertifikat & Akses -->
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex flex-wrap items-center gap-2">
+                                <!-- 5. Tindakan -->
+                                <td class="px-5 py-3.5 whitespace-nowrap text-right">
+                                    <div class="inline-flex items-center justify-end gap-1.5">
                                         @if($cert)
                                             <a href="{{ route('student.sertifikat.show', $cert->nomor_sertifikat) }}"
                                                target="_blank"
-                                               class="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl text-xs font-bold text-[#047857] bg-[#ECFDF5] hover:bg-[#D1FAE5] border border-[#A7F3D0] transition-colors">
-                                                <span>Lihat / Cetak PDF &nearr;</span>
+                                               class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-[11px] font-bold text-[#047857] bg-[#ECFDF5] hover:bg-[#D1FAE5] border border-[#A7F3D0] transition-colors">
+                                                <span>Lihat PDF &nearr;</span>
                                             </a>
                                             <button type="button"
                                                     onclick="document.getElementById('modal-sertifikat-{{ $akses->id }}').classList.remove('hidden')"
-                                                    class="inline-flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-[#334155] bg-white hover:bg-slate-50 border border-[#CBD5E1] transition-colors cursor-pointer">
-                                                Ubah Nilai
+                                                    class="inline-flex items-center px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-[#334155] bg-white hover:bg-slate-50 border border-[#CBD5E1] transition-colors cursor-pointer">
+                                                Nilai
                                             </button>
                                         @else
                                             <button type="button"
                                                     onclick="document.getElementById('modal-sertifikat-{{ $akses->id }}').classList.remove('hidden')"
-                                                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all cursor-pointer">
+                                                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-[11px] font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all cursor-pointer">
                                                 <span>Terbitkan Sertifikat</span>
                                             </button>
                                         @endif
@@ -307,8 +298,8 @@
                                         @if($isOffline)
                                             <button type="button"
                                                     onclick="document.getElementById('modal-akses-user-{{ $student->id }}').classList.remove('hidden')"
-                                                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#0F172A] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-colors cursor-pointer">
-                                                <svg class="w-3.5 h-3.5 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-[#0F172A] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-colors cursor-pointer">
+                                                <svg class="w-3 h-3 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                                 </svg>
                                                 <span>Kelola Akses</span>
@@ -319,7 +310,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-[#64748B]">
+                                <td colspan="5" class="px-6 py-12 text-center text-[#64748B]">
                                     Belum ada data siswa pada kategori ini. Klik tombol <strong>+ Daftarkan Siswa Offline / Manual</strong> di kanan atas untuk menambahkan peserta baru.
                                 </td>
                             </tr>
@@ -457,7 +448,7 @@
         <div id="modal-akses-user-{{ $studentUser->id }}"
              class="hidden fixed inset-0 z-50 bg-[#0B0F19]/80 flex items-center justify-center p-4 overflow-y-auto"
              onclick="if(event.target === this) this.classList.add('hidden')">
-            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 max-w-[540px] w-full shadow-2xl space-y-5 my-8">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 max-w-lg w-full shadow-2xl space-y-4 my-6">
                 <div class="flex items-center justify-between gap-2 border-b border-[#F1F5F9] pb-3">
                     <div>
                         <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
@@ -543,15 +534,15 @@
 
     <!-- MODAL TAMBAH SISWA OFFLINE / MANUAL -->
     <div id="modal-tambah-siswa"
-         class="hidden fixed inset-0 z-50 bg-[#0B0F19]/80 flex items-center justify-center p-3 overflow-y-auto"
+         class="hidden fixed inset-0 z-50 bg-[#0B0F19]/80 flex items-center justify-center p-4 overflow-y-auto"
          onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 sm:p-5 max-w-[460px] w-full shadow-2xl space-y-3.5 my-4">
+        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 max-w-lg w-full shadow-2xl space-y-3.5 my-4">
             <div class="flex items-center justify-between gap-2 border-b border-[#F1F5F9] pb-2.5">
                 <div>
                     <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
                         INPUT PESERTA BARU STUDIO
                     </span>
-                    <h2 class="text-sm sm:text-base font-extrabold font-heading text-[#0F172A]">
+                    <h2 class="text-base font-extrabold font-heading text-[#0F172A]">
                         Daftarkan Siswa Offline / Manual
                     </h2>
                 </div>
@@ -576,7 +567,7 @@
                                name="name"
                                required
                                placeholder="Contoh: Ahmad Fauzi, S.Ars"
-                               class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                               class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                     </div>
 
                     <div class="space-y-1">
@@ -588,7 +579,7 @@
                                name="email"
                                required
                                placeholder="ahmad@gmail.com"
-                               class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] font-mono text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                               class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-mono text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                     </div>
 
                     <div class="space-y-1">
@@ -600,7 +591,7 @@
                                name="nomor_whatsapp"
                                required
                                placeholder="081234567890"
-                               class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] font-mono text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                               class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-mono text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                     </div>
 
                     <div class="space-y-1">
@@ -611,9 +602,9 @@
                                 name="kelas_id"
                                 required
                                 onchange="syncDefaultBonusCheckbox(this.value)"
-                                class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                                class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                             @foreach($kelasList as $k)
-                                <option value="{{ $k->id }}">{{ $k->judul_kelas }} ({{ $k->formattedHarga() }})</option>
+                                <option value="{{ $k->id }}">{{ \Illuminate\Support\Str::before($k->judul_kelas, ':') }} ({{ $k->formattedHarga() }})</option>
                             @endforeach
                         </select>
                     </div>
@@ -626,13 +617,13 @@
                                 name="tipe_kelas"
                                 required
                                 onchange="toggleBonusOnlineSection(this.value)"
-                                class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                                class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                             <option value="offline">Offline Studio (+ Bonus Online)</option>
                             <option value="online">Online LMS</option>
                         </select>
                     </div>
 
-                    <!-- Pilihan Hak Akses Kelas Online (Bonus Siswa Offline) -->
+                    <!-- Pilihan Hak Akses Kelas Online (Bonus Siswa Offline - Grid 2 Kolom Ringkas) -->
                     <div id="section-bonus-online" class="sm:col-span-2 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-3 space-y-2">
                         <input type="hidden" name="has_bonus_selection" value="1">
                         <div class="flex items-center justify-between gap-2">
@@ -642,16 +633,17 @@
                             <span class="text-[10px] font-mono text-[#D11F2E] font-semibold">Bisa pilih &ge; 1</span>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-1.5 max-h-28 overflow-y-auto pr-1">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                             @foreach($kelasList as $k)
-                                <label class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] bg-white hover:border-[#D11F2E]/60 cursor-pointer transition-all">
+                                <label class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] bg-white hover:border-[#D11F2E]/60 cursor-pointer transition-all"
+                                       title="{{ $k->judul_kelas }}">
                                     <input type="checkbox"
                                            name="bonus_kelas_ids[]"
                                            value="{{ $k->id }}"
                                            {{ $loop->first ? 'checked' : '' }}
-                                           class="bonus-kelas-checkbox rounded border-[#CBD5E1] text-[#D11F2E] focus:ring-[#D11F2E]">
+                                           class="bonus-kelas-checkbox rounded border-[#CBD5E1] text-[#D11F2E] focus:ring-[#D11F2E] shrink-0">
                                     <span class="text-[11px] font-semibold text-[#0F172A] truncate">
-                                        {{ $k->judul_kelas }}
+                                        {{ \Illuminate\Support\Str::before($k->judul_kelas, ':') }}
                                     </span>
                                 </label>
                             @endforeach
@@ -666,7 +658,7 @@
                                id="siswa_profesi"
                                name="status_profesi"
                                placeholder="Mahasiswa / Drafter"
-                               class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                               class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                     </div>
 
                     <div class="space-y-1">
@@ -677,22 +669,22 @@
                                id="siswa_instansi"
                                name="instansi_asal"
                                placeholder="Universitas Hasanuddin"
-                               class="w-full px-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                               class="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                     </div>
                 </div>
 
-                <div class="p-2.5 rounded-lg bg-[#FFF1F2] border border-[#FECDD3] text-[10px] text-[#9F1239] leading-snug">
+                <div class="p-2.5 rounded-xl bg-[#FFF1F2] border border-[#FECDD3] text-[11px] text-[#9F1239] leading-snug">
                     <strong>Info:</strong> Akun baru otomatis dibuat dengan password default <code class="font-mono font-bold">password123</code> (aktif 365 hari).
                 </div>
 
                 <div class="flex items-center justify-end gap-2 pt-1">
                     <button type="button"
                             onclick="document.getElementById('modal-tambah-siswa').classList.add('hidden')"
-                            class="px-3.5 py-2 rounded-lg border border-[#CBD5E1] text-[#334155] font-semibold hover:bg-slate-50">
+                            class="px-4 py-2 rounded-xl border border-[#CBD5E1] text-[#334155] font-semibold hover:bg-slate-50">
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-4 py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm cursor-pointer">
+                            class="px-4 py-2 rounded-xl text-white font-semibold bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm cursor-pointer">
                         Simpan &amp; Aktifkan Siswa
                     </button>
                 </div>
