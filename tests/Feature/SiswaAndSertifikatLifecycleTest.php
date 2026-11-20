@@ -147,6 +147,7 @@ class SiswaAndSertifikatLifecycleTest extends TestCase
             ->get(route('admin.siswa.index', ['kategori' => 'offline']))
             ->assertOk()
             ->assertSee('Fadel Offline Makassar')
+            ->assertSee('Kelola Akses')
             ->assertDontSee('Nadia Online Jakarta');
 
         // Filter: online only
@@ -154,6 +155,7 @@ class SiswaAndSertifikatLifecycleTest extends TestCase
             ->get(route('admin.siswa.index', ['kategori' => 'online']))
             ->assertOk()
             ->assertSee('Nadia Online Jakarta')
+            ->assertDontSee('Kelola Akses')
             ->assertDontSee('Fadel Offline Makassar');
 
         // Filter: bersertifikat only

@@ -305,14 +305,16 @@
                                             </button>
                                         @endif
 
-                                        <button type="button"
-                                                onclick="document.getElementById('modal-akses-user-{{ $student->id }}').classList.remove('hidden')"
-                                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#0F172A] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-colors cursor-pointer">
-                                            <svg class="w-3.5 h-3.5 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                                            </svg>
-                                            <span>Kelola Akses</span>
-                                        </button>
+                                        @if($isOffline)
+                                            <button type="button"
+                                                    onclick="document.getElementById('modal-akses-user-{{ $student->id }}').classList.remove('hidden')"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#0F172A] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-colors cursor-pointer">
+                                                <svg class="w-3.5 h-3.5 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                </svg>
+                                                <span>Kelola Akses</span>
+                                            </button>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -444,8 +446,8 @@
         </div>
     @endforeach
 
-    <!-- MODAL KELOLA HAK AKSES KELAS ONLINE (PER USER) -->
-    @foreach($enrollments->pluck('user')->unique('id') as $studentUser)
+    <!-- MODAL KELOLA HAK AKSES KELAS ONLINE (KHUSUS SISWA OFFLINE) -->
+    @foreach($enrollments->filter(fn ($a) => $a->isOffline())->pluck('user')->unique('id') as $studentUser)
         @php
             $activeKelasIds = $studentUser->aksesKelas
                 ->filter(fn ($ak) => $ak->isAktif())
@@ -460,10 +462,10 @@
                 <div class="flex items-center justify-between gap-2 border-b border-[#F1F5F9] pb-3">
                     <div>
                         <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
-                            PENGATURAN HAK AKSES KELAS ONLINE (LMS)
+                            PENGATURAN BONUS AKSES KELAS ONLINE (SISWA OFFLINE)
                         </span>
                         <h2 class="text-base sm:text-lg font-extrabold font-heading text-[#0F172A]">
-                            Kelola Akses Kelas Online Siswa
+                            Kelola Bonus Kelas Online Siswa Offline
                         </h2>
                     </div>
                     <button type="button"
