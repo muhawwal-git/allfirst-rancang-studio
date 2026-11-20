@@ -215,10 +215,37 @@
 
                     <!-- Action Buttons -->
                     <div class="space-y-2.5">
-                        <form method="POST" action="{{ route('admin.transaksi.approve', $trx->id) }}">
+                        <form method="POST" action="{{ route('admin.transaksi.approve', $trx->id) }}" class="space-y-2.5">
                             @csrf
+                            @if($trx->jenis_transaksi === 'offline' && isset($kelasList) && $kelasList->isNotEmpty())
+                                <div class="rounded-xl bg-[#FFF1F2]/60 border border-[#FECDD3] p-3.5 space-y-2 text-xs">
+                                    <input type="hidden" name="has_bonus_selection" value="1">
+                                    <div>
+                                        <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
+                                            PENGATURAN BONUS KELAS ONLINE (SISWA OFFLINE)
+                                        </span>
+                                        <p class="text-[11px] text-[#334155] mt-0.5">
+                                            Pilih kelas online yang diizinkan untuk diakses oleh siswa offline ini:
+                                        </p>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-32 overflow-y-auto pr-1">
+                                        @foreach($kelasList as $k)
+                                            <label class="flex items-start gap-2 p-2 rounded-lg border border-[#FECDD3] bg-white hover:border-[#D11F2E] cursor-pointer transition-colors">
+                                                <input type="checkbox"
+                                                       name="bonus_kelas_ids[]"
+                                                       value="{{ $k->id }}"
+                                                       {{ (int) $k->id === (int) $trx->kelas_id ? 'checked' : '' }}
+                                                       class="mt-0.5 rounded border-[#CBD5E1] text-[#D11F2E] focus:ring-[#D11F2E]">
+                                                <span class="text-[11px] font-semibold text-[#0F172A] leading-tight">
+                                                    {{ $k->judul_kelas }}
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                             <button type="submit"
-                                    class="w-full py-3 px-4 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md transition-all">
+                                    class="w-full py-3 px-4 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md transition-all cursor-pointer">
                                 Setujui Pembayaran &amp; Aktifkan Akses
                             </button>
                         </form>

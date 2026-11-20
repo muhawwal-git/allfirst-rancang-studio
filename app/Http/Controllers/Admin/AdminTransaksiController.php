@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AksesKelas;
+use App\Models\Kelas;
 use App\Models\Sertifikat;
 use App\Models\Transaksi;
 use Illuminate\Http\RedirectResponse;
@@ -30,9 +31,15 @@ class AdminTransaksiController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $kelasList = Kelas::query()
+            ->where('status_publikasi', 'published')
+            ->orderBy('judul_kelas')
+            ->get();
+
         return view('admin.transaksi.index', [
             'transaksis' => $transaksis,
             'currentStatus' => $status ?? 'semua',
+            'kelasList' => $kelasList,
         ]);
     }
 
@@ -40,34 +47,90 @@ class AdminTransaksiController extends Controller
     {
         $transaksi->load(['user', 'kelas']);
 
+        $kelasList = Kelas::query()
+            ->where('status_publikasi', 'published')
+            ->orderBy('judul_kelas')
+            ->get();
+
         return view('admin.transaksi.show', [
             'transaksi' => $transaksi,
+            'kelasList' => $kelasList,
         ]);
     }
 
-    public function approve(Transaksi $transaksi): RedirectResponse
+    public function approve(Request $request, Transaksi $transaksi): RedirectResponse
     {
+        $validated = $request->validate([
+            'bonus_kelas_ids' => ['nullable', 'array'],
+            'bonus_kelas_ids.*' => ['integer', 'exists:kelas,id'],
+            'has_bonus_selection' => ['nullable', 'boolean'],
+        ]);
+
         $transaksi->update([
             'status_pembayaran' => 'berhasil',
             'verified_at' => now(),
         ]);
 
         $durationDays = (int) config('allfirst.access_duration_days', 365);
+        $isOffline = $transaksi->jenis_transaksi === 'offline';
 
-        // Activate or extend course access for student
-        AksesKelas::updateOrCreate(
-            [
-                'user_id' => $transaksi->user_id,
-                'kelas_id' => $transaksi->kelas_id,
-            ],
-            [
-                'transaksi_id' => $transaksi->id,
-                'tipe_kelas' => $transaksi->jenis_transaksi === 'offline' ? 'offline' : 'online',
-                'tanggal_mulai' => now(),
-                'tanggal_kedaluwarsa' => now()->addDays($durationDays),
-                'status_akses' => 'aktif',
-            ]
-        );
+        if ($isOffline) {
+            $hasCustomBonusPayload = $request->has('bonus_kelas_ids') || $request->boolean('has_bonus_selection');
+            $selectedBonusIds = $hasCustomBonusPayload
+                ? collect($validated['bonus_kelas_ids'] ?? [])->map(fn ($id) => (int) $id)->unique()->values()
+                : collect([(int) $transaksi->kelas_id]);
+
+            $primaryOnlineActive = $selectedBonusIds->contains((int) $transaksi->kelas_id);
+
+            AksesKelas::updateOrCreate(
+                [
+                    'user_id' => $transaksi->user_id,
+                    'kelas_id' => $transaksi->kelas_id,
+                ],
+                [
+                    'transaksi_id' => $transaksi->id,
+                    'tipe_kelas' => 'offline',
+                    'tanggal_mulai' => now(),
+                    'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                    'status_akses' => $primaryOnlineActive ? 'aktif' : 'nonaktif',
+                ]
+            );
+
+            foreach ($selectedBonusIds as $bonusKelasId) {
+                if ($bonusKelasId === (int) $transaksi->kelas_id) {
+                    continue;
+                }
+
+                AksesKelas::updateOrCreate(
+                    [
+                        'user_id' => $transaksi->user_id,
+                        'kelas_id' => $bonusKelasId,
+                    ],
+                    [
+                        'transaksi_id' => $transaksi->id,
+                        'tipe_kelas' => 'offline',
+                        'tanggal_mulai' => now(),
+                        'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                        'status_akses' => 'aktif',
+                    ]
+                );
+            }
+        } else {
+            // Activate or extend course access for student
+            AksesKelas::updateOrCreate(
+                [
+                    'user_id' => $transaksi->user_id,
+                    'kelas_id' => $transaksi->kelas_id,
+                ],
+                [
+                    'transaksi_id' => $transaksi->id,
+                    'tipe_kelas' => 'online',
+                    'tanggal_mulai' => now(),
+                    'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                    'status_akses' => 'aktif',
+                ]
+            );
+        }
 
         return back()->with('success', "Transaksi {$transaksi->nomor_invoice} berhasil disetujui! Hak akses kelas 365 hari telah aktif untuk siswa.");
     }

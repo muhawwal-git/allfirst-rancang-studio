@@ -8,6 +8,7 @@ use App\Models\Materi;
 use App\Models\Modul;
 use App\Models\PengaturanSitus;
 use App\Models\Sertifikat;
+use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -291,5 +292,57 @@ class SiswaAndSertifikatLifecycleTest extends TestCase
         $this->assertSame(sprintf('031-ARS%s-%s/MKS/%s', date('y'), date('m'), date('Y')), $cert->nomor_sertifikat);
         $this->assertSame('Baik', $cert->predikat);
         $this->assertSame(80, $cert->nilai);
+    }
+
+    public function test_admin_can_control_bonus_online_class_access_for_offline_students_on_registration_approval_and_directory(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $kelasCad = Kelas::factory()->published()->create(['judul_kelas' => 'AutoCAD Studio']);
+        $kelasSketchup = Kelas::factory()->published()->create(['judul_kelas' => 'SketchUp Studio']);
+        $kelasRevit = Kelas::factory()->published()->create(['judul_kelas' => 'Revit BIM']);
+
+        // 1. Manual offline registration with specific bonus online classes (AutoCAD + SketchUp, NOT Revit)
+        $this->actingAs($admin)->post(route('admin.siswa.store'), [
+            'name' => 'Rizky Offline Custom',
+            'email' => 'rizky@studio.id',
+            'nomor_whatsapp' => '081355566677',
+            'kelas_id' => $kelasCad->id,
+            'tipe_kelas' => 'offline',
+            'has_bonus_selection' => 1,
+            'bonus_kelas_ids' => [$kelasCad->id, $kelasSketchup->id],
+        ])->assertRedirect(route('admin.siswa.index'));
+
+        $rizky = User::query()->where('email', 'rizky@studio.id')->firstOrFail();
+        $this->assertTrue($rizky->hasActiveAccessTo($kelasCad));
+        $this->assertTrue($rizky->hasActiveAccessTo($kelasSketchup));
+        $this->assertFalse($rizky->hasActiveAccessTo($kelasRevit));
+
+        // 2. Admin uses "Kelola Akses" modal endpoint to restrict Rizky to ONLY AutoCAD (revoking SketchUp)
+        $this->actingAs($admin)->post(route('admin.siswa.akses', $rizky->id), [
+            'akses_kelas_ids' => [$kelasCad->id],
+        ])->assertRedirect();
+
+        $rizky->refresh();
+        $this->assertTrue($rizky->hasActiveAccessTo($kelasCad));
+        $this->assertFalse($rizky->hasActiveAccessTo($kelasSketchup));
+        $this->assertFalse($rizky->hasActiveAccessTo($kelasRevit));
+
+        // 3. Offline transaction approval via website checkout with Admin choosing bonus online access
+        $webStudent = User::factory()->student()->create(['email' => 'webstudent@studio.id']);
+        $offlineTrx = Transaksi::factory()->create([
+            'user_id' => $webStudent->id,
+            'kelas_id' => $kelasCad->id,
+            'jenis_transaksi' => 'offline',
+            'status_pembayaran' => 'menunggu_verifikasi',
+        ]);
+
+        $this->actingAs($admin)->post(route('admin.transaksi.approve', $offlineTrx->id), [
+            'has_bonus_selection' => 1,
+            'bonus_kelas_ids' => [$kelasCad->id, $kelasRevit->id],
+        ])->assertRedirect();
+
+        $this->assertTrue($webStudent->hasActiveAccessTo($kelasCad));
+        $this->assertTrue($webStudent->hasActiveAccessTo($kelasRevit));
+        $this->assertFalse($webStudent->hasActiveAccessTo($kelasSketchup));
     }
 }

@@ -88,6 +88,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/siswa', [AdminSiswaController::class, 'store'])->name('siswa.store');
     Route::post('/siswa/pengaturan-sertifikat', [AdminSiswaController::class, 'updateNomorSertifikat'])->name('siswa.pengaturan-sertifikat');
     Route::post('/siswa/{aksesKelas}/sertifikat', [AdminSiswaController::class, 'issueSertifikat'])->name('siswa.sertifikat');
+    Route::post('/siswa/{user}/akses', [AdminSiswaController::class, 'updateAksesKelas'])->name('siswa.akses');
 
     // Manajemen Kelas
     Route::resource('kelas', AdminKelasController::class)->parameters(['kelas' => 'kelas']);

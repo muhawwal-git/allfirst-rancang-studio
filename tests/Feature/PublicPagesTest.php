@@ -127,7 +127,7 @@ class PublicPagesTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Dokumen Referensi Gratis');
-        $response->assertSee('Panduan Standar Layer');
+        $response->assertSee('Standar Kelengkapan Gambar Arsitektur PUPR 2021');
         $response->assertSee('Unduh via Google Drive');
     }
 

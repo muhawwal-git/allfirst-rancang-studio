@@ -26,7 +26,7 @@ class AdminSiswaController extends Controller
         $sertifikatPairs = Sertifikat::query()->get(['user_id', 'kelas_id']);
 
         $enrollmentsQuery = AksesKelas::query()
-            ->with(['user', 'kelas.moduls.materis', 'transaksi'])
+            ->with(['user.aksesKelas.kelas', 'kelas.moduls.materis', 'transaksi'])
             ->when($kategori === 'offline', function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('tipe_kelas', 'offline')
@@ -142,6 +142,9 @@ class AdminSiswaController extends Controller
             'tipe_kelas' => ['required', 'string', 'in:offline,online'],
             'status_profesi' => ['nullable', 'string', 'max:60'],
             'instansi_asal' => ['nullable', 'string', 'max:120'],
+            'bonus_kelas_ids' => ['nullable', 'array'],
+            'bonus_kelas_ids.*' => ['integer', 'exists:kelas,id'],
+            'has_bonus_selection' => ['nullable', 'boolean'],
         ]);
 
         $user = User::query()->where('email', $validated['email'])->first();
@@ -153,16 +156,16 @@ class AdminSiswaController extends Controller
                 'nomor_whatsapp' => $validated['nomor_whatsapp'],
                 'password' => 'password123',
                 'role' => 'student',
-                'status_profesi' => $validated['status_profesi'] ?: 'Peserta Studio',
-                'instansi_asal' => $validated['instansi_asal'] ?: 'Allfirst Rancang Studio Makassar',
+                'status_profesi' => ($validated['status_profesi'] ?? null) ?: 'Peserta Studio',
+                'instansi_asal' => ($validated['instansi_asal'] ?? null) ?: 'Allfirst Rancang Studio Makassar',
                 'email_verified_at' => now(),
             ]);
         } else {
             $user->update([
                 'name' => $validated['name'],
                 'nomor_whatsapp' => $validated['nomor_whatsapp'],
-                'status_profesi' => $validated['status_profesi'] ?: $user->status_profesi,
-                'instansi_asal' => $validated['instansi_asal'] ?: $user->instansi_asal,
+                'status_profesi' => ($validated['status_profesi'] ?? null) ?: $user->status_profesi,
+                'instansi_asal' => ($validated['instansi_asal'] ?? null) ?: $user->instansi_asal,
             ]);
         }
 
@@ -181,25 +184,136 @@ class AdminSiswaController extends Controller
 
         $durationDays = (int) config('allfirst.access_duration_days', 365);
 
-        AksesKelas::updateOrCreate(
-            [
-                'user_id' => $user->id,
-                'kelas_id' => $kelas->id,
-            ],
-            [
-                'transaksi_id' => $transaksi->id,
-                'tipe_kelas' => $isOffline ? 'offline' : 'online',
-                'tanggal_mulai' => now(),
-                'tanggal_kedaluwarsa' => now()->addDays($durationDays),
-                'status_akses' => 'aktif',
-            ]
-        );
+        if ($isOffline) {
+            $hasCustomBonusPayload = $request->has('bonus_kelas_ids') || $request->boolean('has_bonus_selection');
+            $selectedBonusIds = $hasCustomBonusPayload
+                ? collect($validated['bonus_kelas_ids'] ?? [])->map(fn ($id) => (int) $id)->unique()->values()
+                : collect([(int) $kelas->id]);
 
-        $labelTipe = $isOffline ? 'Offline Studio (+ Bonus Online)' : 'Online LMS';
+            $primaryOnlineActive = $selectedBonusIds->contains((int) $kelas->id);
+
+            AksesKelas::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'kelas_id' => $kelas->id,
+                ],
+                [
+                    'transaksi_id' => $transaksi->id,
+                    'tipe_kelas' => 'offline',
+                    'tanggal_mulai' => now(),
+                    'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                    'status_akses' => $primaryOnlineActive ? 'aktif' : 'nonaktif',
+                ]
+            );
+
+            foreach ($selectedBonusIds as $bonusKelasId) {
+                if ($bonusKelasId === (int) $kelas->id) {
+                    continue;
+                }
+
+                AksesKelas::updateOrCreate(
+                    [
+                        'user_id' => $user->id,
+                        'kelas_id' => $bonusKelasId,
+                    ],
+                    [
+                        'transaksi_id' => $transaksi->id,
+                        'tipe_kelas' => 'offline',
+                        'tanggal_mulai' => now(),
+                        'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                        'status_akses' => 'aktif',
+                    ]
+                );
+            }
+        } else {
+            AksesKelas::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'kelas_id' => $kelas->id,
+                ],
+                [
+                    'transaksi_id' => $transaksi->id,
+                    'tipe_kelas' => 'online',
+                    'tanggal_mulai' => now(),
+                    'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                    'status_akses' => 'aktif',
+                ]
+            );
+        }
+
+        $labelTipe = $isOffline ? 'Offline Studio (+ Bonus Online Terpilih)' : 'Online LMS';
 
         return redirect()
             ->route('admin.siswa.index')
             ->with('success', "Siswa {$user->name} berhasil didaftarkan pada kelas {$kelas->judul_kelas} ({$labelTipe}). Akun belajar sudah aktif (Password default jika akun baru: password123).");
+    }
+
+    public function updateAksesKelas(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'akses_kelas_ids' => ['nullable', 'array'],
+            'akses_kelas_ids.*' => ['integer', 'exists:kelas,id'],
+        ]);
+
+        $selectedIds = collect($validated['akses_kelas_ids'] ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values();
+
+        $durationDays = (int) config('allfirst.access_duration_days', 365);
+
+        $existingAksesList = $user->aksesKelas()->with('transaksi')->get();
+        $isOfflineStudent = $existingAksesList->contains(fn (AksesKelas $a) => $a->isOffline())
+            || $user->transaksis()->where('jenis_transaksi', 'offline')->exists();
+        $primaryTransaksiId = $existingAksesList->firstWhere('transaksi_id', '!=', null)?->transaksi_id;
+        $transactionKelasIds = $user->transaksis()->pluck('kelas_id')->map(fn ($id) => (int) $id)->all();
+        $certifiedKelasIds = $user->sertifikats()->pluck('kelas_id')->map(fn ($id) => (int) $id)->all();
+
+        foreach ($selectedIds as $kelasId) {
+            $existing = $existingAksesList->firstWhere('kelas_id', $kelasId);
+
+            if ($existing) {
+                $existing->update([
+                    'status_akses' => 'aktif',
+                    'tanggal_kedaluwarsa' => $existing->tanggal_kedaluwarsa && $existing->tanggal_kedaluwarsa->isFuture()
+                        ? $existing->tanggal_kedaluwarsa
+                        : now()->addDays($durationDays),
+                ]);
+            } else {
+                AksesKelas::query()->create([
+                    'user_id' => $user->id,
+                    'kelas_id' => $kelasId,
+                    'transaksi_id' => $primaryTransaksiId,
+                    'tipe_kelas' => $isOfflineStudent ? 'offline' : 'online',
+                    'tanggal_mulai' => now(),
+                    'tanggal_kedaluwarsa' => now()->addDays($durationDays),
+                    'status_akses' => 'aktif',
+                ]);
+            }
+        }
+
+        $remainingAkses = $user->aksesKelas()->get();
+        foreach ($remainingAkses as $akses) {
+            if ($selectedIds->contains((int) $akses->kelas_id)) {
+                continue;
+            }
+
+            $isPrimaryOrCertified = in_array((int) $akses->kelas_id, $transactionKelasIds, true)
+                || in_array((int) $akses->kelas_id, $certifiedKelasIds, true);
+
+            if ($isPrimaryOrCertified || $user->aksesKelas()->count() <= 1) {
+                $akses->update([
+                    'status_akses' => 'nonaktif',
+                ]);
+            } else {
+                $akses->delete();
+            }
+        }
+
+        return back()->with(
+            'success',
+            "Hak akses kelas online untuk {$user->name} ({$user->email}) berhasil diperbarui ({$selectedIds->count()} kelas online aktif)."
+        );
     }
 
     public function issueSertifikat(Request $request, AksesKelas $aksesKelas): RedirectResponse

@@ -222,7 +222,7 @@
                                 </td>
 
                                 <!-- 3. Kelas & Tipe Belajar -->
-                                <td class="px-6 py-4 max-w-[250px]">
+                                <td class="px-6 py-4 max-w-[260px]">
                                     <div class="font-bold text-[#0F172A] leading-snug">{{ $kelas->judul_kelas }}</div>
                                     <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
                                         @if($isOffline)
@@ -234,9 +234,19 @@
                                                 ONLINE LMS
                                             </span>
                                         @endif
-                                        <span class="text-[10px] font-mono text-[#64748B]">
-                                            Sisa {{ $akses->sisaHari() }} hari
-                                        </span>
+
+                                        @if($akses->isAktif())
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
+                                                VIDEO AKTIF
+                                            </span>
+                                            <span class="text-[10px] font-mono text-[#64748B]">
+                                                Sisa {{ $akses->sisaHari() }} hari
+                                            </span>
+                                        @else
+                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F8FAFC] text-[#64748B] border border-[#CBD5E1]">
+                                                VIDEO TERKUNCI
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
 
@@ -273,7 +283,7 @@
                                     @endif
                                 </td>
 
-                                <!-- 6. Tindakan Sertifikat -->
+                                <!-- 6. Tindakan Sertifikat & Akses -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex flex-wrap items-center gap-2">
                                         @if($cert)
@@ -294,6 +304,15 @@
                                                 <span>Terbitkan Sertifikat</span>
                                             </button>
                                         @endif
+
+                                        <button type="button"
+                                                onclick="document.getElementById('modal-akses-user-{{ $student->id }}').classList.remove('hidden')"
+                                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#0F172A] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-colors cursor-pointer">
+                                            <svg class="w-3.5 h-3.5 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                            </svg>
+                                            <span>Kelola Akses</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -425,6 +444,102 @@
         </div>
     @endforeach
 
+    <!-- MODAL KELOLA HAK AKSES KELAS ONLINE (PER USER) -->
+    @foreach($enrollments->pluck('user')->unique('id') as $studentUser)
+        @php
+            $activeKelasIds = $studentUser->aksesKelas
+                ->filter(fn ($ak) => $ak->isAktif())
+                ->pluck('kelas_id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+        @endphp
+        <div id="modal-akses-user-{{ $studentUser->id }}"
+             class="hidden fixed inset-0 z-50 bg-[#0B0F19]/80 flex items-center justify-center p-4 overflow-y-auto"
+             onclick="if(event.target === this) this.classList.add('hidden')">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 max-w-[540px] w-full shadow-2xl space-y-5 my-8">
+                <div class="flex items-center justify-between gap-2 border-b border-[#F1F5F9] pb-3">
+                    <div>
+                        <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
+                            PENGATURAN HAK AKSES KELAS ONLINE (LMS)
+                        </span>
+                        <h2 class="text-base sm:text-lg font-extrabold font-heading text-[#0F172A]">
+                            Kelola Akses Kelas Online Siswa
+                        </h2>
+                    </div>
+                    <button type="button"
+                            onclick="document.getElementById('modal-akses-user-{{ $studentUser->id }}').classList.add('hidden')"
+                            class="text-[#64748B] hover:text-[#D11F2E] p-1">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-4 space-y-2 text-xs">
+                    <div class="flex justify-between gap-3">
+                        <span class="text-[#64748B]">Nama Siswa:</span>
+                        <span class="font-bold text-[#0F172A] text-right">{{ $studentUser->name }}</span>
+                    </div>
+                    <div class="flex justify-between gap-3">
+                        <span class="text-[#64748B]">Email Akun Login:</span>
+                        <span class="font-mono font-bold text-[#0F172A] text-right">{{ $studentUser->email }}</span>
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ route('admin.siswa.akses', $studentUser->id) }}" class="space-y-4 text-xs">
+                    @csrf
+                    <div class="space-y-2">
+                        <label class="block font-bold text-[#0F172A]">
+                            Pilih Kelas Online yang Diizinkan untuk Akun Ini:
+                        </label>
+                        <p class="text-[11px] text-[#64748B]">
+                            Centang kelas online yang boleh ditonton oleh siswa ini. Kelas yang tidak dicentang akan otomatis terkunci di dashboard siswa.
+                        </p>
+
+                        <div class="space-y-2 max-h-60 overflow-y-auto pr-1 pt-1">
+                            @foreach($kelasList as $k)
+                                @php
+                                    $isChecked = in_array((int) $k->id, $activeKelasIds, true);
+                                @endphp
+                                <label class="flex items-center justify-between gap-3 p-3 rounded-xl border border-[#CBD5E1] bg-white hover:border-[#D11F2E]/60 cursor-pointer transition-all">
+                                    <div class="flex items-center gap-2.5">
+                                        <input type="checkbox"
+                                               name="akses_kelas_ids[]"
+                                               value="{{ $k->id }}"
+                                               {{ $isChecked ? 'checked' : '' }}
+                                               class="rounded border-[#CBD5E1] text-[#D11F2E] focus:ring-[#D11F2E]">
+                                        <span class="font-bold text-[#0F172A]">{{ $k->judul_kelas }}</span>
+                                    </div>
+                                    @if($isChecked)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] shrink-0">
+                                            Aktif
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#E2E8F0] shrink-0">
+                                            Terkunci
+                                        </span>
+                                    @endif
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-2.5 pt-2">
+                        <button type="button"
+                                onclick="document.getElementById('modal-akses-user-{{ $studentUser->id }}').classList.add('hidden')"
+                                class="px-4 py-2.5 rounded-xl border border-[#CBD5E1] text-[#334155] font-semibold hover:bg-slate-50">
+                            Batal
+                        </button>
+                        <button type="submit"
+                                class="px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm cursor-pointer">
+                            Simpan Hak Akses Kelas
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
+
     <!-- MODAL TAMBAH SISWA OFFLINE / MANUAL -->
     <div id="modal-tambah-siswa"
          class="hidden fixed inset-0 z-50 bg-[#0B0F19]/80 flex items-center justify-center p-4 overflow-y-auto"
@@ -489,11 +604,12 @@
 
                     <div class="space-y-1.5">
                         <label for="siswa_kelas" class="block font-bold text-[#0F172A]">
-                            Pilih Program Kelas
+                            Pilih Program Kelas Utama
                         </label>
                         <select id="siswa_kelas"
                                 name="kelas_id"
                                 required
+                                onchange="syncDefaultBonusCheckbox(this.value)"
                                 class="w-full px-3.5 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
                             @foreach($kelasList as $k)
                                 <option value="{{ $k->id }}">{{ $k->judul_kelas }} ({{ $k->formattedHarga() }})</option>
@@ -508,10 +624,42 @@
                         <select id="siswa_tipe"
                                 name="tipe_kelas"
                                 required
+                                onchange="toggleBonusOnlineSection(this.value)"
                                 class="w-full px-3.5 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] font-semibold text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
-                            <option value="offline">Kelas Offline Studio (+ Bonus Online)</option>
+                            <option value="offline">Kelas Offline Studio (+ Bonus Online Terpilih)</option>
                             <option value="online">Kelas Online LMS</option>
                         </select>
+                    </div>
+
+                    <!-- Pilihan Hak Akses Kelas Online (Bonus Siswa Offline) -->
+                    <div id="section-bonus-online" class="sm:col-span-2 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-4 space-y-2.5">
+                        <input type="hidden" name="has_bonus_selection" value="1">
+                        <div>
+                            <span class="text-[10px] font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
+                                HAK AKSES KELAS ONLINE (BONUS SISWA OFFLINE)
+                            </span>
+                            <label class="block font-bold text-[#0F172A] mt-0.5">
+                                Tentukan Kelas Online yang Bisa Diakses Siswa Ini:
+                            </label>
+                            <p class="text-[11px] text-[#64748B] mt-0.5">
+                                Centang kelas online yang diberikan sebagai bonus sesuai pendaftaran kelas offline-nya.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-44 overflow-y-auto pr-1">
+                            @foreach($kelasList as $k)
+                                <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-[#CBD5E1] bg-white hover:border-[#D11F2E]/60 cursor-pointer transition-all">
+                                    <input type="checkbox"
+                                           name="bonus_kelas_ids[]"
+                                           value="{{ $k->id }}"
+                                           {{ $loop->first ? 'checked' : '' }}
+                                           class="bonus-kelas-checkbox mt-0.5 rounded border-[#CBD5E1] text-[#D11F2E] focus:ring-[#D11F2E]">
+                                    <span class="text-xs font-semibold text-[#0F172A] leading-snug">
+                                        {{ $k->judul_kelas }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="space-y-1.5">
@@ -538,7 +686,7 @@
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-[#FFF1F2] border border-[#FECDD3] text-[11px] text-[#9F1239] leading-relaxed">
-                    <strong>Info Otomatis:</strong> Jika email siswa belum pernah terdaftar, sistem akan otomatis membuatkan akun dengan password bawaan <code class="font-mono font-bold">password123</code> dan langsung mengaktifkan akses materi kelasnya selama 365 hari.
+                    <strong>Info Otomatis:</strong> Jika email siswa belum pernah terdaftar, sistem akan otomatis membuatkan akun dengan password bawaan <code class="font-mono font-bold">password123</code> dan mengaktifkan akses kelas online sesuai pilihan di atas selama 365 hari.
                 </div>
 
                 <div class="flex items-center justify-end gap-2.5 pt-2">
@@ -555,4 +703,23 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function syncDefaultBonusCheckbox(selectedKelasId) {
+            const checkboxes = document.querySelectorAll('.bonus-kelas-checkbox');
+            checkboxes.forEach((cb) => {
+                cb.checked = (cb.value === String(selectedKelasId));
+            });
+        }
+
+        function toggleBonusOnlineSection(tipe) {
+            const section = document.getElementById('section-bonus-online');
+            if (!section) return;
+            if (tipe === 'offline') {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        }
+    </script>
 @endsection
