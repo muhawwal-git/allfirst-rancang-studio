@@ -6,7 +6,7 @@
     <div class="space-y-6 w-full">
         <!-- Header Row (A-03: iboRY) -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
+            <div class="min-w-0">
                 <h1 class="text-2xl sm:text-[28px] font-extrabold font-heading text-[#0F172A] tracking-tight">
                     Manajemen Kelas Online &amp; Offline
                 </h1>
@@ -14,13 +14,13 @@
                     Kelola katalog kelas video online (LMS) maupun katalog program pelatihan tatap muka studio (Offline).
                 </p>
             </div>
-            <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex items-center justify-end gap-2.5 shrink-0">
                 <a href="{{ route('admin.kelas.create', ['jenis' => 'offline']) }}"
-                   class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-semibold text-[#0F172A] bg-white hover:bg-slate-50 border border-[#CBD5E1] shadow-2xs transition-all">
+                   class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-semibold text-[#0F172A] bg-white hover:bg-slate-50 border border-[#CBD5E1] shadow-2xs transition-all whitespace-nowrap">
                     + Tambah Kelas Offline
                 </a>
                 <a href="{{ route('admin.kelas.create', ['jenis' => 'online']) }}"
-                   class="inline-flex items-center px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
+                   class="inline-flex items-center px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all whitespace-nowrap">
                     + Tambah Kelas Baru
                 </a>
             </div>
@@ -56,26 +56,26 @@
                 <table class="w-full text-left text-xs">
                     <thead class="bg-[#F1F5F9] text-[#334155] border-b border-[#E2E8F0] font-bold">
                         <tr>
-                            <th class="px-6 py-4">Judul Kelas</th>
-                            <th class="px-6 py-4">Kategori Software</th>
-                            <th class="px-6 py-4">Harga Normal</th>
-                            <th class="px-6 py-4">Status Publikasi</th>
-                            <th class="px-6 py-4">Tindakan</th>
+                            <th class="px-5 py-3.5">Judul Kelas</th>
+                            <th class="px-5 py-3.5">Kategori Software</th>
+                            <th class="px-5 py-3.5">Harga Normal</th>
+                            <th class="px-5 py-3.5">Status Publikasi</th>
+                            <th class="px-5 py-3.5 text-right">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#E2E8F0]">
                         @forelse($courses as $course)
                             <tr class="hover:bg-slate-50/70 transition-colors">
                                 <!-- 1. Judul Kelas -->
-                                <td class="px-6 py-4 max-w-[280px] leading-relaxed">
+                                <td class="px-5 py-3.5 min-w-[220px] max-w-[300px] leading-snug">
                                     <div class="font-bold text-[#0F172A] text-xs sm:text-[13px]">{{ $course->judul_kelas }}</div>
                                     <div class="mt-1">
                                         @if($course->isOfflineCatalog())
-                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3] whitespace-nowrap">
                                                 KATALOG OFFLINE STUDIO
                                             </span>
                                         @else
-                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]">
+                                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] whitespace-nowrap">
                                                 KATALOG ONLINE LMS
                                             </span>
                                         @endif
@@ -83,40 +83,40 @@
                                 </td>
 
                                 <!-- 2. Kategori Software -->
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]">
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]">
                                         {{ $course->kategori }}
                                     </span>
                                 </td>
 
                                 <!-- 3. Harga Normal -->
-                                <td class="px-6 py-4 font-mono font-bold text-[#0F172A] whitespace-nowrap">
+                                <td class="px-5 py-3.5 font-mono font-bold text-[#0F172A] whitespace-nowrap">
                                     {{ $course->formattedHarga() }}
                                 </td>
 
                                 <!-- 4. Status Publikasi -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-5 py-3.5 whitespace-nowrap">
                                     @if($course->status_publikasi === 'published')
-                                        <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
+                                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
                                             Terbit (Aktif)
                                         </span>
                                     @else
-                                        <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]">
+                                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]">
                                             Draf (Disimpan)
                                         </span>
                                     @endif
                                 </td>
 
                                 <!-- 5. Tindakan (Edit Informasi, Kelola Kurikulum, Hapus Kelas) -->
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center gap-2">
+                                <td class="px-5 py-3.5 whitespace-nowrap text-right">
+                                    <div class="inline-flex items-center justify-end gap-1.5">
                                         <a href="{{ route('admin.kelas.edit', $course->id) }}"
-                                           class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-[#0F172A] border border-[#E2E8F0] transition-colors">
+                                           class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-[#0F172A] border border-[#E2E8F0] transition-colors">
                                             Edit Informasi
                                         </a>
 
                                         <a href="{{ route('admin.kelas.kurikulum', $course->id) }}"
-                                           class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#0F172A] hover:bg-[#1E293B] text-white border border-[#0F172A] transition-colors">
+                                           class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0F172A] hover:bg-[#1E293B] text-white border border-[#0F172A] transition-colors">
                                             Kelola Kurikulum
                                         </a>
 
@@ -124,7 +124,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                    class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#D11F2E] border border-[#FECACA] transition-colors">
+                                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#D11F2E] border border-[#FECACA] transition-colors">
                                                 Hapus Kelas
                                             </button>
                                         </form>
