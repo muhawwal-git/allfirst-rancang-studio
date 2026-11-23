@@ -34,10 +34,10 @@
                 <p class="text-[11px] text-[#64748B]">Akumulasi peserta kelas aktif</p>
             </div>
 
-            <div class="p-5 rounded-2xl bg-[#FFF1F2] border border-[#FECDD3] shadow-2xs space-y-1.5">
-                <span class="text-xs font-bold text-[#D11F2E] block">Siswa Offline Studio</span>
-                <div class="text-2xl font-extrabold font-mono text-[#D11F2E]">{{ $offlineCount }} Siswa</div>
-                <p class="text-[11px] text-[#9F1239]">Tatap muka Makassar (+ Bonus Online)</p>
+            <div class="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-2xs space-y-1.5">
+                <span class="text-xs font-semibold text-[#64748B] block">Siswa Offline Studio</span>
+                <div class="text-2xl font-extrabold font-mono text-[#0F172A]">{{ $offlineCount }} Siswa</div>
+                <p class="text-[11px] text-[#64748B]">Tatap muka Makassar</p>
             </div>
 
             <div class="p-5 rounded-2xl bg-white border border-[#E2E8F0] shadow-2xs space-y-1.5">
