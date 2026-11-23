@@ -6,9 +6,6 @@
     <div class="space-y-6 w-full">
         <!-- Top Title Stack (A-01: k7P3F) -->
         <div class="space-y-1">
-            <span class="text-[11px] font-mono text-[#D11F2E] font-bold uppercase tracking-wider block">
-                IKHTISAR OPERASIONAL
-            </span>
             <h1 class="text-2xl sm:text-[28px] font-extrabold font-heading text-[#0F172A] tracking-tight">
                 Dashboard Utama Admin
                 <span class="sr-only">Dashboard Pengelola Allfirst</span>

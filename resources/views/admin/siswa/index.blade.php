@@ -7,9 +7,7 @@
         <!-- Header Row -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="space-y-1">
-                <span class="text-[11px] font-mono text-[#D11F2E] font-bold uppercase tracking-wider block">
-                    DIREKTORI AKADEMIK &amp; ALUMNI
-                </span>
+                
                 <h1 class="text-2xl sm:text-[28px] font-extrabold font-heading text-[#0F172A] tracking-tight">
                     Data Siswa &amp; Penerbitan Sertifikat
                 </h1>

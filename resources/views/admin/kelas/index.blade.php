@@ -14,12 +14,8 @@
                     Kelola katalog kelas video online (LMS) maupun katalog program pelatihan tatap muka studio (Offline).
                 </p>
             </div>
-            <div class="flex items-center justify-end gap-2.5 shrink-0">
-                <a href="{{ route('admin.kelas.create', ['jenis' => 'offline']) }}"
-                   class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-semibold text-[#0F172A] bg-white hover:bg-slate-50 border border-[#CBD5E1] shadow-2xs transition-all whitespace-nowrap">
-                    + Tambah Kelas Offline
-                </a>
-                <a href="{{ route('admin.kelas.create', ['jenis' => 'online']) }}"
+            <div class="flex items-center justify-end shrink-0">
+                <a href="{{ route('admin.kelas.create') }}"
                    class="inline-flex items-center px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all whitespace-nowrap">
                     + Tambah Kelas Baru
                 </a>
@@ -72,11 +68,11 @@
                                     <div class="mt-1">
                                         @if($course->isOfflineCatalog())
                                             <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3] whitespace-nowrap">
-                                                KATALOG OFFLINE STUDIO
+                                                OFFLINE
                                             </span>
                                         @else
                                             <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] whitespace-nowrap">
-                                                KATALOG ONLINE LMS
+                                                ONLINE
                                             </span>
                                         @endif
                                     </div>
