@@ -60,7 +60,7 @@
                                 name="kategori"
                                 required
                                 class="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] text-xs sm:text-[13px] focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
-                            <option value="" disabled {{ old('kategori') ? '' : 'selected' }}>Pilih software (AutoCAD, SketchUp, Revit, Lumion, dll.)</option>
+                            <option value="" disabled {{ old('kategori') ? '' : 'selected' }}>Pilih software (AutoCAD, SketchUp, Revit, Enscape, dll.)</option>
                             @foreach($categories as $cat)
                                 <option value="{{ $cat }}" {{ old('kategori') === $cat ? 'selected' : '' }}>
                                     {{ $cat }}

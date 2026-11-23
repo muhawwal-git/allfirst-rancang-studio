@@ -134,17 +134,17 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'judul_kelas' => 'Lumion Rendering: Visualisasi Arsitektur & Animasi Cepat',
-                'slug' => 'lumion-rendering-visualisasi-arsitektur',
-                'kategori' => 'Lumion',
+                'judul_kelas' => 'Enscape Rendering: Visualisasi Arsitektur & Animasi Cepat',
+                'slug' => 'enscape-rendering-visualisasi-arsitektur',
+                'kategori' => 'Enscape',
                 'harga' => 380000,
                 'is_unggulan' => false,
-                'deskripsi' => 'Pelajari pengaturan pencahayaan alami (Real Skies & Sun), material PBR realistis, penataan vegetasi lanskap, serta produksi animasi video walkthrough arsitektur berkualitas tinggi.',
+                'deskripsi' => 'Pelajari pengaturan pencahayaan alami (Real-Time Sun & Sky), material PBR realistis, penataan vegetasi lanskap, serta produksi animasi video walkthrough arsitektur berkualitas tinggi.',
                 'moduls' => [
                     [
                         'judul_modul' => 'Modul 1: Sinkronisasi Model & Setup Pencahayaan Realistis',
                         'materis' => [
-                            ['judul_materi' => 'LiveSync SketchUp ke Lumion & Penataan Kamera Komposisi', 'durasi_tampil' => '06:50', 'durasi_detik' => 410, 'cuplikan_gratis' => true],
+                            ['judul_materi' => 'LiveSync SketchUp ke Enscape & Penataan Kamera Komposisi', 'durasi_tampil' => '06:50', 'durasi_detik' => 410, 'cuplikan_gratis' => true],
                         ],
                     ],
                 ],

@@ -71,14 +71,14 @@ class PublicPagesTest extends TestCase
     public function test_course_detail_page_can_be_rendered_for_published_course(): void
     {
         $kelas = Kelas::factory()->published()->create([
-            'judul' => 'Lumion Cinematic Rendering',
+            'judul' => 'Enscape Cinematic Rendering',
             'harga' => 350000,
-            'kategori' => 'Lumion',
+            'kategori' => 'Enscape',
         ]);
 
         $modul = Modul::factory()->create([
             'kelas_id' => $kelas->id,
-            'judul_modul' => 'Modul 01: Pengenalan Interface Lumion',
+            'judul_modul' => 'Modul 01: Pengenalan Interface Enscape',
             'nomor_urutan' => 1,
         ]);
 
@@ -92,8 +92,8 @@ class PublicPagesTest extends TestCase
         $response = $this->get(route('kelas.show', $kelas->slug));
 
         $response->assertOk();
-        $response->assertSee('Lumion Cinematic Rendering');
-        $response->assertSee('Modul 01: Pengenalan Interface Lumion');
+        $response->assertSee('Enscape Cinematic Rendering');
+        $response->assertSee('Modul 01: Pengenalan Interface Enscape');
         $response->assertSee('Import Model 3D');
         $response->assertSee('Cuplikan Gratis');
         $response->assertSee('350.000');

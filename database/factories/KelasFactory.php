@@ -21,7 +21,7 @@ class KelasFactory extends Factory
         return [
             'judul_kelas' => $title,
             'slug' => Str::slug($title),
-            'kategori' => fake()->randomElement(['AutoCAD', 'SketchUp', 'Revit', 'Lumion']),
+            'kategori' => fake()->randomElement(['AutoCAD', 'SketchUp', 'Revit', 'Enscape']),
             'harga' => fake()->randomElement([350000, 380000, 400000, 420000, 450000]),
             'deskripsi' => fake()->paragraph(3),
             'manfaat' => [

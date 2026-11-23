@@ -26,7 +26,7 @@ return [
         'Umum / Pencari Kerja',
     ],
 
-    'kategori_software' => ['AutoCAD', 'SketchUp', 'Revit', 'Lumion'],
+    'kategori_software' => ['AutoCAD', 'SketchUp', 'Revit', 'Enscape'],
 
     'admin_whatsapp' => '6285190367139',
 
@@ -102,9 +102,9 @@ return [
             'course' => 'Revit Architecture: Fundamental BIM',
         ],
         [
-            'quote' => 'Hasil render Lumion langsung terlihat profesional untuk presentasi klien. Akses 1 tahun bikin nyaman mengulang materi.',
+            'quote' => 'Hasil render Enscape langsung terlihat profesional untuk presentasi klien. Akses 1 tahun bikin nyaman mengulang materi.',
             'name' => 'Siti Rauzelia',
-            'course' => 'Lumion Rendering & Animasi Cepat',
+            'course' => 'Enscape Rendering & Animasi Cepat',
         ],
         [
             'quote' => 'Selesai menonton 100%, sertifikat ber-QR resminya langsung terbit dan saya pakai untuk melamar kerja.',

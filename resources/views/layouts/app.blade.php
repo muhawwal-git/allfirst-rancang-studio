@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Kursus Software Arsitektur & Sipil Siap Kerja') — {{ config('allfirst.brand_name', 'Allfirst Rancang Studio') }}</title>
-    <meta name="description" content="@yield('meta_description', 'Studio pelatihan software perancangan arsitektur, sipil & BIM profesional: AutoCAD 2D/3D, SketchUp, Revit, dan Lumion berstandar industri konsultan DED.')">
+    <meta name="description" content="@yield('meta_description', 'Studio pelatihan software perancangan arsitektur, sipil & BIM profesional: AutoCAD 2D/3D, SketchUp, Revit, dan Enscape berstandar industri konsultan DED.')">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}">

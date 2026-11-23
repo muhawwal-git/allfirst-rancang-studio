@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Pelatihan Tatap Muka (Offline) — Allfirst Rancang Studio')
-@section('meta_description', 'Informasi program bimbingan teknis tatap muka langsung di studio: AutoCAD, SketchUp, Revit, dan Lumion. Pendaftaran via WhatsApp resmi Allfirst Rancang Studio.')
+@section('meta_description', 'Informasi program bimbingan teknis tatap muka langsung di studio: AutoCAD, SketchUp, Revit, dan Enscape. Pendaftaran via WhatsApp resmi Allfirst Rancang Studio.')
 
 @section('content')
     <!-- HERO OFFLINE (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
@@ -129,7 +129,7 @@
                     </p>
                 </div>
 
-                <!-- Program 4: Lumion -->
+                <!-- Program 4: Enscape -->
                 <div class="bg-[#F8FAFC] rounded-2xl border border-[#F1F5F9] p-6 space-y-4 hover:border-rose-200 transition-colors">
                     <div class="w-10 h-10 rounded-xl bg-white border border-[#E2E8F0] text-[#D11F2E] flex items-center justify-center shadow-sm">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,7 +137,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-bold font-heading text-[#0F172A]">
-                        Lumion (Visualisasi Rendering &amp; Animasi)
+                        Enscape (Visualisasi Rendering &amp; Animasi)
                     </h3>
                     <p class="text-sm text-[#334155] leading-relaxed">
                         Fokus pada pencahayaan alami (sun &amp; shadow), pengaplikasian material realistik, penataan landscape &amp; entourage, serta produksi render still-image dan video animasi sinematik.

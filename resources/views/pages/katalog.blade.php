@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Katalog Kelas Online — Allfirst Rancang Studio')
-@section('meta_description', 'Katalog pelatihan software arsitektur & sipil: AutoCAD, SketchUp, Revit, dan Lumion. Materi berstandar konsultan DED dengan akses video 1 tahun.')
+@section('meta_description', 'Katalog pelatihan software arsitektur & sipil: AutoCAD, SketchUp, Revit, dan Enscape. Materi berstandar konsultan DED dengan akses video 1 tahun.')
 
 @section('content')
     <!-- HERO KATALOG (Header Only with subtle radial-faded CAD grid per UI Design PDF) -->

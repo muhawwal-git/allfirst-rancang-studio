@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Allfirst Rancang Studio — Kursus Software Arsitektur, Sipil & BIM Siap Kerja')
-@section('meta_description', 'Studio pelatihan software AutoCAD, SketchUp, Revit BIM, dan Lumion standar konsultan DED perencana. Materi terstruktur, video streaming, dan sertifikat ber-QR.')
+@section('meta_description', 'Studio pelatihan software AutoCAD, SketchUp, Revit BIM, dan Enscape standar konsultan DED perencana. Materi terstruktur, video streaming, dan sertifikat ber-QR.')
 
 @section('content')
     <!-- HERO SECTION (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
@@ -33,12 +33,12 @@
                     <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                         <a href="{{ route('kelas.index') }}"
                            class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-md shadow-red-950/10 transition-all transform hover:-translate-y-0.5">
-                            <span>Jelajahi Kelas Online</span>
+                            <span>Kelas Online</span>
                         </a>
 
                         <a href="{{ route('offline') }}"
                            class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-semibold text-[#0F172A] bg-white border border-[#E2E8F0] hover:bg-slate-50 transition-colors shadow-sm">
-                            <span>Info Pelatihan Studio</span>
+                            <span>Kelas Offline</span>
                         </a>
                     </div>
                 </div>
@@ -414,7 +414,7 @@
                             {{ $promoPopup['subjudul'] }}
                         </p>
                         <div class="pt-1 flex flex-wrap items-center gap-1.5">
-                            @foreach(['AUTOCAD 2D/3D', 'SKETCHUP', 'REVIT BIM', 'LUMION'] as $swTag)
+                            @foreach(['AUTOCAD 2D/3D', 'SKETCHUP', 'REVIT BIM', 'ENSCAPE'] as $swTag)
                                 <span class="px-2 py-0.5 rounded bg-[#0B0F19]/70 border border-white/15 text-[10px] font-mono font-semibold text-[#E2E8F0]">
                                     {{ $swTag }}
                                 </span>
