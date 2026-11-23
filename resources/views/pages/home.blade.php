@@ -141,19 +141,24 @@
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div class="space-y-2 max-w-3xl">
                     <h2 class="text-xl sm:text-2xl font-bold font-heading text-[#0F172A]">
-                        Lebih Memilih Pelatihan Tatap Muka Langsung?
+                        Ingin Belajar Langsung dengan Pendampingan Instruktur?
                     </h2>
                     <p class="text-sm sm:text-base text-[#334155] leading-relaxed">
-                        Dapatkan pendampingan teknis intensif langsung di studio Allfirst Rancang Studio dengan jadwal yang dikonsultasikan bersama instruktur. Pendaftaran dan konsultasi materi dilayani langsung melalui WhatsApp resmi.
+                        Setiap orang memiliki cara belajar yang berbeda. Bagi kamu yang ingin memperdalam pemahaman melalui interaksi langsung, diskusi, dan praktik yang lebih intensif, pelatihan tatap muka bisa menjadi pengalaman belajar yang tepat.<br>
+                         Jadwal pelatihan dikonsultasikan bersama instruktur. Hubungi WhatsApp resmi kami untuk informasi pendaftaran dan konsultasi materi.
                     </p>
                 </div>
 
-                <div class="shrink-0 w-full md:w-auto">
+                <div class="shrink-0 w-full md:w-auto flex md:justify-end">
                     <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Studio, saya ingin konsultasi mengenai pendaftaran Pelatihan Tatap Muka (Offline).') }}"
                        target="_blank"
                        rel="noopener"
-                       class="w-full md:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-[#0F172A] hover:bg-slate-800 shadow-sm transition-all">
-                        <span>Konsultasi via WhatsApp</span>
+                       aria-label="Konsultasi via WhatsApp"
+                       title="Konsultasi via WhatsApp"
+                       class="inline-flex items-center justify-center p-4 rounded-xl text-white bg-[#0F172A] hover:bg-slate-800 border border-[#1E293B] shadow-sm transition-all">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.54 1.771.83 2.791.83h.002c3.18 0 5.767-2.586 5.768-5.766 0-3.18-2.587-5.766-5.77-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.761 0-3.411-.46-4.854-1.266l-5.146 1.346 1.371-5.012c-.896-1.492-1.371-3.21-1.371-5.068 0-5.514 4.486-10 10-10s10 4.486 10 10z"/>
+                        </svg>
                     </a>
                 </div>
             </div>
