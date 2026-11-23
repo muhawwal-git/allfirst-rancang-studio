@@ -528,7 +528,7 @@ class AdminManagementTest extends TestCase
         $this->actingAs($student)
             ->get(route('student.classroom', [$onlineClass->slug, $materiOnline->id]))
             ->assertOk()
-            ->assertSee('Dapatkan Software & Bahan Praktik', false)
+            ->assertSee('Dapatkan Software & Bahan Praktik')
             ->assertSee('https://drive.google.com/drive/folders/1jAfbtnk5fqRO4u2JrL0VdIvIYANZDzj2');
     }
 }
