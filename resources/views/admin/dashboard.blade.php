@@ -14,46 +14,58 @@
 
         <!-- 4 Metric Cards Row (A-01: Metrics Grid) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            <!-- 1. Perlu Verifikasi (fill: #FEF2F2, stroke: #F1F5F9) -->
-            <div class="p-6 rounded-2xl bg-[#FEF2F2] border border-[#F1F5F9] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] space-y-2">
-                <span class="text-xs font-bold text-[#D11F2E] block">
-                    Perlu Verifikasi
-                </span>
+            <!-- 1. Perlu Verifikasi (Clickable -> Verifikasi Pembayaran) -->
+            <a href="{{ route('admin.transaksi.index', ['status' => 'menunggu_verifikasi']) }}"
+               class="block p-6 rounded-2xl bg-[#FEF2F2] hover:bg-[#FEE2E2]/70 border border-[#FECDD3] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] hover:shadow-md transition-all space-y-2 group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#D11F2E] block">
+                        Perlu Verifikasi
+                    </span>
+                    <span class="text-xs font-bold text-[#D11F2E] group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                </div>
                 <div class="text-2xl sm:text-[26px] font-extrabold font-mono text-[#D11F2E] tracking-tight">
                     {{ $pendingCount }} Transaksi
                 </div>
                 <p class="text-xs text-[#64748B] leading-relaxed">
                     Transaksi baru yang menunggu audit bukti transfer
                 </p>
-            </div>
+            </a>
 
-            <!-- 2. Total Siswa Aktif -->
-            <div class="p-6 rounded-2xl bg-white border border-[#F1F5F9] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] space-y-2">
-                <span class="text-xs font-semibold text-[#64748B] block">
-                    Total Siswa Aktif
-                </span>
+            <!-- 2. Total Siswa Aktif (Clickable -> Data Siswa) -->
+            <a href="{{ route('admin.siswa.index') }}"
+               class="block p-6 rounded-2xl bg-white hover:bg-slate-50 border border-[#F1F5F9] hover:border-[#CBD5E1] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] hover:shadow-md transition-all space-y-2 group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-[#64748B] group-hover:text-[#0F172A] transition-colors block">
+                        Total Siswa Aktif
+                    </span>
+                    <span class="text-xs font-bold text-[#64748B] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all">&rarr;</span>
+                </div>
                 <div class="text-2xl sm:text-[26px] font-extrabold font-mono text-[#0F172A] tracking-tight">
                     {{ $studentsCount }} Siswa
                 </div>
                 <p class="text-xs text-[#64748B] leading-relaxed">
                     Pengguna aktif terdaftar yang memiliki kelas valid
                 </p>
-            </div>
+            </a>
 
-            <!-- 3. Kelas Terbit -->
-            <div class="p-6 rounded-2xl bg-white border border-[#F1F5F9] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] space-y-2">
-                <span class="text-xs font-semibold text-[#64748B] block">
-                    Kelas Terbit
-                </span>
+            <!-- 3. Kelas Terbit (Clickable -> Kelola Kelas) -->
+            <a href="{{ route('admin.kelas.index') }}"
+               class="block p-6 rounded-2xl bg-white hover:bg-slate-50 border border-[#F1F5F9] hover:border-[#CBD5E1] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] hover:shadow-md transition-all space-y-2 group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-[#64748B] group-hover:text-[#0F172A] transition-colors block">
+                        Kelas Terbit
+                    </span>
+                    <span class="text-xs font-bold text-[#64748B] group-hover:text-[#0F172A] group-hover:translate-x-0.5 transition-all">&rarr;</span>
+                </div>
                 <div class="text-2xl sm:text-[26px] font-extrabold font-mono text-[#0F172A] tracking-tight">
                     {{ $coursesCount }} Kelas
                 </div>
                 <p class="text-xs text-[#64748B] leading-relaxed">
                     Jumlah kelas aktif yang dapat diakses publik
                 </p>
-            </div>
+            </a>
 
-            <!-- 4. Total Pendapatan -->
+            <!-- 4. Total Pendapatan (Static Info Card) -->
             <div class="p-6 rounded-2xl bg-white border border-[#F1F5F9] shadow-[0_8px_25px_-5px_rgba(15,23,42,0.04)] space-y-2">
                 <span class="text-xs font-semibold text-[#64748B] block">
                     Total Pendapatan
@@ -64,78 +76,6 @@
                 <p class="text-xs text-[#64748B] leading-relaxed">
                     Total akumulasi dana transaksi yang telah disetujui
                 </p>
-            </div>
-        </div>
-
-        <!-- Queue Section: Transaksi Menunggu Verifikasi Segera (Ringkasan Maks 3 Antrean Mendesak) -->
-        <div class="space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                    <h2 class="text-base sm:text-lg font-extrabold font-heading text-[#0F172A]">
-                        Antrean Menunggu Verifikasi Segera
-                    </h2>
-                    @if($pendingCount > 0)
-                        <span class="inline-flex px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
-                            {{ $pendingCount }} Pending
-                        </span>
-                    @endif
-                </div>
-
-                <a href="{{ route('admin.transaksi.index', ['status' => $pendingCount > 0 ? 'menunggu_verifikasi' : 'semua']) }}"
-                   class="text-xs font-semibold text-[#D11F2E] hover:underline inline-flex items-center gap-1">
-                    <span>Buka Menu Verifikasi Pembayaran ({{ $pendingCount }} Antrean) &rarr;</span>
-                </a>
-            </div>
-
-            <div class="rounded-2xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-[#F1F5F9] text-[#334155] border-b border-[#E2E8F0] font-bold">
-                            <tr>
-                                <th class="px-5 py-3">Invoice</th>
-                                <th class="px-5 py-3">Siswa</th>
-                                <th class="px-5 py-3">Kelas / Program</th>
-                                <th class="px-5 py-3">Nominal</th>
-                                <th class="px-5 py-3 text-right">Aksi Cepat</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#E2E8F0]">
-                            @forelse($recentTransaksis as $trx)
-                                <tr class="hover:bg-slate-50/70 transition-colors">
-                                    <td class="px-5 py-3 font-mono font-bold text-[#0F172A] whitespace-nowrap">
-                                        {{ $trx->nomor_invoice }}
-                                    </td>
-                                    <td class="px-5 py-3 font-semibold text-[#0F172A] whitespace-nowrap">
-                                        {{ $trx->user->name }}
-                                    </td>
-                                    <td class="px-5 py-3 text-[#334155] max-w-[260px]">
-                                        <span class="truncate inline-block max-w-[220px] align-bottom" title="{{ $trx->kelas->judul_kelas }}">{{ $trx->kelas->judul_kelas }}</span>
-                                        @if($trx->jenis_transaksi === 'offline')
-                                            <span class="ml-1 inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
-                                                OFFLINE
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="px-5 py-3 font-mono font-bold text-[#0F172A] whitespace-nowrap">
-                                        {{ $trx->formattedJumlah() }}
-                                    </td>
-                                    <td class="px-5 py-3 whitespace-nowrap text-right">
-                                        <a href="{{ route('admin.transaksi.show', $trx->id) }}"
-                                           class="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
-                                            Periksa Bukti
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-5 py-6 text-center text-[#64748B]">
-                                        Semua bukti pembayaran telah diverifikasi. Tidak ada antrean transaksi yang tertunda saat ini.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
 
