@@ -504,5 +504,31 @@ class AdminManagementTest extends TestCase
             ->assertOk()
             ->assertSee('Video Online AutoCAD 2D')
             ->assertDontSee('Bimbingan Privat Tatap Muka Revit BIM Studio');
+
+        // 5. Admin sets tautan_software (Google Drive link) on online class and enrolled student sees it in Classroom
+        $this->actingAs($admin)->put(route('admin.kelas.update', $onlineClass->id), [
+            'judul_kelas' => $onlineClass->judul_kelas,
+            'kategori' => $onlineClass->kategori,
+            'jenis_kelas' => 'online',
+            'harga' => $onlineClass->harga,
+            'deskripsi' => $onlineClass->deskripsi,
+            'tautan_software' => 'https://drive.google.com/drive/folders/1jAfbtnk5fqRO4u2JrL0VdIvIYANZDzj2',
+            'status_publikasi' => 'published',
+        ])->assertRedirect(route('admin.kelas.index'));
+
+        $modulOnline = Modul::factory()->create(['kelas_id' => $onlineClass->id, 'nomor_urutan' => 1]);
+        $materiOnline = Materi::factory()->create(['modul_id' => $modulOnline->id, 'nomor_urutan' => 1]);
+        $student = User::factory()->student()->create();
+        AksesKelas::factory()->create([
+            'user_id' => $student->id,
+            'kelas_id' => $onlineClass->id,
+            'status_akses' => 'aktif',
+        ]);
+
+        $this->actingAs($student)
+            ->get(route('student.classroom', [$onlineClass->slug, $materiOnline->id]))
+            ->assertOk()
+            ->assertSee('Dapatkan Software & Bahan Praktik', false)
+            ->assertSee('https://drive.google.com/drive/folders/1jAfbtnk5fqRO4u2JrL0VdIvIYANZDzj2');
     }
 }

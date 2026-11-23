@@ -197,6 +197,7 @@ class DatabaseSeeder extends Seeder
                         'Masa Aktif Akses Setahun (365 Hari) Sejak Verifikasi Admin',
                         'Sertifikat Kelulusan Digital Resmi Ber-QR Code Otomatis (100% Progres)',
                     ],
+                    'tautan_software' => 'https://drive.google.com/drive/folders/1jAfbtnk5fqRO4u2JrL0VdIvIYANZDzj2?usp=drive_link',
                     'status_publikasi' => 'published',
                     'is_unggulan' => $cData['is_unggulan'],
                 ]

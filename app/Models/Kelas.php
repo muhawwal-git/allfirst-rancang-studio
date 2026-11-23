@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
     'deskripsi',
     'manfaat',
     'modul_offline',
+    'tautan_software',
     'gambar_sampul',
     'status_publikasi',
     'is_unggulan',

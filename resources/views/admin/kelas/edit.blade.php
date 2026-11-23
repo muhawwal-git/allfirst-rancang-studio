@@ -107,7 +107,26 @@
                         @enderror
                     </div>
 
-                    <!-- 5. Form Buttons -->
+                    <!-- 5. Tautan Software & Bahan Praktik (Google Drive — Opsional) -->
+                    <div class="space-y-1.5">
+                        <label for="tautan_software" class="block font-bold text-[#0F172A]">
+                            Tautan Software &amp; Bahan Praktik (Google Drive — Opsional)
+                        </label>
+                        <input type="url"
+                               id="tautan_software"
+                               name="tautan_software"
+                               value="{{ old('tautan_software', $kelas->tautan_software) }}"
+                               placeholder="Contoh: https://drive.google.com/drive/folders/..."
+                               class="w-full px-4 py-3 rounded-xl bg-white border border-[#CBD5E1] text-[#0F172A] placeholder-[#64748B] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-[#D11F2E]/20 focus:border-[#D11F2E]">
+                        <p class="text-[11px] text-[#64748B]">
+                            Jika diisi, tombol <strong>Dapatkan Software &amp; Bahan Praktik</strong> akan tampil di dalam Area Belajar (Classroom) khusus bagi siswa yang sudah memiliki akses kelas ini.
+                        </p>
+                        @error('tautan_software')
+                            <p class="text-[#D11F2E] mt-1">&times; {{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- 6. Form Buttons -->
                     <div class="flex flex-wrap items-center gap-3 pt-2">
                         <button type="submit"
                                 class="px-6 py-3 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
