@@ -67,55 +67,69 @@
             </div>
         </div>
 
-        <!-- Queue Section: Transaksi Menunggu Verifikasi Segera (Full Width) -->
-        <div class="space-y-3.5">
-            <h2 class="text-base sm:text-lg font-extrabold font-heading text-[#0F172A]">
-                Transaksi Menunggu Verifikasi Segera
-            </h2>
+        <!-- Queue Section: Transaksi Menunggu Verifikasi Segera (Ringkasan Maks 3 Antrean Mendesak) -->
+        <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <h2 class="text-base sm:text-lg font-extrabold font-heading text-[#0F172A]">
+                        Antrean Menunggu Verifikasi Segera
+                    </h2>
+                    @if($pendingCount > 0)
+                        <span class="inline-flex px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                            {{ $pendingCount }} Pending
+                        </span>
+                    @endif
+                </div>
+
+                <a href="{{ route('admin.transaksi.index', ['status' => $pendingCount > 0 ? 'menunggu_verifikasi' : 'semua']) }}"
+                   class="text-xs font-semibold text-[#D11F2E] hover:underline inline-flex items-center gap-1">
+                    <span>Buka Menu Verifikasi Pembayaran ({{ $pendingCount }} Antrean) &rarr;</span>
+                </a>
+            </div>
 
             <div class="rounded-2xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-[#F1F5F9] text-[#334155] border-b border-[#E2E8F0] font-bold">
                             <tr>
-                                <th class="px-6 py-4">Invoice</th>
-                                <th class="px-6 py-4">Siswa</th>
-                                <th class="px-6 py-4">Kelas / Program</th>
-                                <th class="px-6 py-4">Nominal</th>
-                                <th class="px-6 py-4">Aksi</th>
+                                <th class="px-5 py-3">Invoice</th>
+                                <th class="px-5 py-3">Siswa</th>
+                                <th class="px-5 py-3">Kelas / Program</th>
+                                <th class="px-5 py-3">Nominal</th>
+                                <th class="px-5 py-3 text-right">Aksi Cepat</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#E2E8F0]">
                             @forelse($recentTransaksis as $trx)
                                 <tr class="hover:bg-slate-50/70 transition-colors">
-                                    <td class="px-6 py-4 font-mono font-bold text-[#0F172A] whitespace-nowrap">
+                                    <td class="px-5 py-3 font-mono font-bold text-[#0F172A] whitespace-nowrap">
                                         {{ $trx->nomor_invoice }}
                                     </td>
-                                    <td class="px-6 py-4 font-semibold text-[#0F172A] whitespace-nowrap">
+                                    <td class="px-5 py-3 font-semibold text-[#0F172A] whitespace-nowrap">
                                         {{ $trx->user->name }}
                                     </td>
-                                    <td class="px-6 py-4 text-[#334155]">
-                                        <span>{{ $trx->kelas->judul_kelas }}</span>
+                                    <td class="px-5 py-3 text-[#334155] max-w-[260px]">
+                                        <span class="truncate inline-block max-w-[220px] align-bottom" title="{{ $trx->kelas->judul_kelas }}">{{ $trx->kelas->judul_kelas }}</span>
                                         @if($trx->jenis_transaksi === 'offline')
-                                            <span class="ml-1.5 inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
-                                                OFFLINE + BONUS ONLINE
+                                            <span class="ml-1 inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                                                OFFLINE
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 font-mono font-bold text-[#0F172A] whitespace-nowrap">
+                                    <td class="px-5 py-3 font-mono font-bold text-[#0F172A] whitespace-nowrap">
                                         {{ $trx->formattedJumlah() }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-5 py-3 whitespace-nowrap text-right">
                                         <a href="{{ route('admin.transaksi.show', $trx->id) }}"
-                                           class="inline-flex items-center px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
+                                           class="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
                                             Periksa Bukti
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-[#64748B]">
-                                        Belum ada transaksi yang menunggu verifikasi.
+                                    <td colspan="5" class="px-5 py-6 text-center text-[#64748B]">
+                                        Semua bukti pembayaran telah diverifikasi. Tidak ada antrean transaksi yang tertunda saat ini.
                                     </td>
                                 </tr>
                             @endforelse
@@ -132,9 +146,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="space-y-1">
                         <div class="flex items-center gap-2.5">
-                            <svg class="w-4 h-4 text-[#D11F2E] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                            </svg>
+                            
                             <h2 class="text-sm sm:text-base font-extrabold font-heading text-[#0F172A]">
                                 Pengaturan Pengumuman Beranda (Running Text &amp; Hitung Mundur Otomatis)
                                 <span class="sr-only">Running Text Header</span>

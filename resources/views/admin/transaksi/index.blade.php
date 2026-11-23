@@ -39,83 +39,80 @@
             @endif
         </div>
 
-        <!-- Tabel Transaksi (7 Columns: No. Invoice, Nama Siswa, Nama Kelas, Nominal Transfer, Tanggal Transaksi, Status, Tindakan) -->
+        <!-- Tabel Transaksi (6 Kolom Proporsional: No. Invoice & Tanggal, Nama Siswa, Nama Kelas, Nominal Transfer, Status, Tindakan) -->
         <div class="rounded-2xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-[#F1F5F9] text-[#334155] border-b border-[#E2E8F0] font-bold">
                         <tr>
-                            <th class="px-6 py-4">No. Invoice</th>
-                            <th class="px-6 py-4">Nama Siswa</th>
-                            <th class="px-6 py-4">Nama Kelas</th>
-                            <th class="px-6 py-4">Nominal Transfer</th>
-                            <th class="px-6 py-4">Tanggal Transaksi</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Tindakan</th>
+                            <th class="px-5 py-3.5">No. Invoice &amp; Tanggal</th>
+                            <th class="px-5 py-3.5">Nama Siswa</th>
+                            <th class="px-5 py-3.5">Nama Kelas</th>
+                            <th class="px-5 py-3.5">Nominal Transfer</th>
+                            <th class="px-5 py-3.5">Status</th>
+                            <th class="px-5 py-3.5 text-right">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#E2E8F0]">
                         @forelse($transaksis as $trx)
                             <tr class="hover:bg-slate-50/70 transition-colors">
-                                <!-- 1. No. Invoice -->
-                                <td class="px-6 py-4 font-mono font-bold text-[#0F172A] whitespace-nowrap">
-                                    {{ $trx->nomor_invoice }}
+                                <!-- 1. No. Invoice & Tanggal -->
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    <div class="font-mono font-bold text-[#0F172A]">{{ $trx->nomor_invoice }}</div>
+                                    <div class="text-[11px] text-[#64748B] mt-0.5">{{ $trx->created_at->format('d M Y') }}</div>
                                 </td>
 
                                 <!-- 2. Nama Siswa -->
-                                <td class="px-6 py-4 font-semibold text-[#0F172A] whitespace-nowrap">
+                                <td class="px-5 py-3.5 font-semibold text-[#0F172A] whitespace-nowrap">
                                     {{ $trx->user->name }}
                                 </td>
 
                                 <!-- 3. Nama Kelas -->
-                                <td class="px-6 py-4 text-[#334155] max-w-[260px] leading-relaxed">
-                                    <span>{{ $trx->kelas->judul_kelas }}</span>
+                                <td class="px-5 py-3.5 text-[#334155] max-w-[260px]">
+                                    <div class="font-medium text-[#0F172A] truncate" title="{{ $trx->kelas->judul_kelas }}">
+                                        {{ $trx->kelas->judul_kelas }}
+                                    </div>
                                     @if($trx->jenis_transaksi === 'offline')
-                                        <span class="ml-1.5 inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
-                                            OFFLINE + BONUS ONLINE
+                                        <span class="mt-1 inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF1F2] text-[#D11F2E] border border-[#FECDD3]">
+                                            OFFLINE
                                         </span>
                                     @endif
                                 </td>
 
                                 <!-- 4. Nominal Transfer -->
-                                <td class="px-6 py-4 font-mono font-bold text-[#0F172A] whitespace-nowrap">
+                                <td class="px-5 py-3.5 font-mono font-bold text-[#0F172A] whitespace-nowrap">
                                     {{ $trx->formattedJumlah() }}
                                 </td>
 
-                                <!-- 5. Tanggal Transaksi -->
-                                <td class="px-6 py-4 text-[#64748B] whitespace-nowrap">
-                                    {{ $trx->created_at->format('d M Y') }}
-                                </td>
-
-                                <!-- 6. Status -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- 5. Status -->
+                                <td class="px-5 py-3.5 whitespace-nowrap">
                                     @if($trx->status_pembayaran === 'berhasil')
-                                        <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
+                                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0]">
                                             Berhasil
                                         </span>
                                     @elseif($trx->status_pembayaran === 'ditolak')
-                                        <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#FFF1F2] text-[#D11F2E] border border-[#FFE4E6]">
+                                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF1F2] text-[#D11F2E] border border-[#FFE4E6]">
                                             Ditolak
                                         </span>
                                     @else
-                                        <span class="inline-flex px-3.5 py-1 rounded-full text-xs font-semibold bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
+                                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
                                             Menunggu Verifikasi
                                         </span>
                                     @endif
                                 </td>
 
-                                <!-- 7. Tindakan -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- 6. Tindakan -->
+                                <td class="px-5 py-3.5 whitespace-nowrap text-right">
                                     @if(in_array($trx->status_pembayaran, ['menunggu_verifikasi', 'menunggu_pembayaran']))
                                         <button type="button"
                                                 onclick="document.getElementById('modal-audit-{{ $trx->id }}').classList.remove('hidden')"
-                                                class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all">
+                                                class="inline-flex items-center px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-[#D11F2E] to-[#9E111B] hover:brightness-105 border border-[#BA151C] shadow-sm transition-all cursor-pointer">
                                             Periksa Bukti
                                         </button>
                                     @else
                                         <button type="button"
                                                 onclick="document.getElementById('modal-audit-{{ $trx->id }}').classList.remove('hidden')"
-                                                class="inline-flex items-center px-3.5 py-2 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-[#0F172A] border border-[#E2E8F0] transition-colors">
+                                                class="inline-flex items-center px-3.5 py-2 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-[#0F172A] border border-[#E2E8F0] transition-colors cursor-pointer">
                                             Lihat Detail
                                         </button>
                                     @endif
@@ -123,7 +120,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-10 text-center text-[#64748B]">
+                                <td colspan="6" class="px-6 py-10 text-center text-[#64748B]">
                                     Tidak ada data transaksi yang cocok dengan filter.
                                 </td>
                             </tr>

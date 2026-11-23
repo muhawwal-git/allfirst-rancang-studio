@@ -32,9 +32,9 @@ class AdminDashboardController extends Controller
 
         $recentTransaksis = Transaksi::query()
             ->with(['user', 'kelas'])
-            ->orderByRaw("CASE WHEN status_pembayaran = 'menunggu_verifikasi' THEN 0 ELSE 1 END")
-            ->orderBy('id')
-            ->take(6)
+            ->where('status_pembayaran', 'menunggu_verifikasi')
+            ->latest('id')
+            ->take(3)
             ->get();
 
         $runningText = PengaturanSitus::getValue('running_text', 'Batch Tatap Muka Studio Sedang Berjalan (Sisa {sisa_hari} Hari) ◆ Pendaftaran Batch Berikutnya Dibuka via WhatsApp ◆ E-Book Gratis Tersedia');
