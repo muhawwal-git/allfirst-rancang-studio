@@ -107,6 +107,14 @@ class CheckoutAndStudentClassroomTest extends TestCase
         $this->assertSame('menunggu_verifikasi', $transaksi->status_pembayaran);
         $this->assertNotNull($transaksi->bukti_pembayaran);
         Storage::disk('public')->assertExists($transaksi->bukti_pembayaran);
+
+        // PDF format must be rejected (only JPG/PNG allowed)
+        $pdfFile = UploadedFile::fake()->create('struk-transfer.pdf', 500, 'application/pdf');
+        $this->actingAs($user)
+            ->post(route('transaksi.upload', $transaksi->nomor_invoice), [
+                'bukti_transfer' => $pdfFile,
+            ])
+            ->assertSessionHasErrors('bukti_transfer');
     }
 
     public function test_student_can_access_student_dashboard(): void

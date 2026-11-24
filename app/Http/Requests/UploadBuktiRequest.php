@@ -18,7 +18,7 @@ class UploadBuktiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bukti_transfer' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'bukti_transfer' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 
@@ -29,7 +29,7 @@ class UploadBuktiRequest extends FormRequest
     {
         return [
             'bukti_transfer.required' => 'Silakan pilih berkas bukti transfer terlebih dahulu.',
-            'bukti_transfer.mimes' => 'Format berkas bukti transfer harus berupa JPG, PNG, atau PDF.',
+            'bukti_transfer.mimes' => 'Format berkas bukti transfer hanya boleh berupa JPG atau PNG.',
             'bukti_transfer.max' => 'Ukuran berkas bukti transfer maksimal 2 MB.',
         ];
     }

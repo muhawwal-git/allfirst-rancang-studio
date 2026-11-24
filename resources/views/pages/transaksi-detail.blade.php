@@ -138,13 +138,13 @@
 
                             <div class="space-y-2">
                                 <label for="bukti_transfer" class="block text-xs font-semibold text-[#0F172A]">
-                                    Pilih Berkas Bukti Transfer (JPG, PNG, atau PDF maks 2 MB)
+                                    Pilih Berkas Bukti Transfer (JPG atau PNG maks 2 MB)
                                 </label>
                                 <input type="file"
                                        id="bukti_transfer"
                                        name="bukti_transfer"
                                        required
-                                       accept=".jpg,.jpeg,.png,.pdf"
+                                       accept=".jpg,.jpeg,.png"
                                        class="w-full text-xs text-[#64748B] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#FFF1F2] file:text-[#D11F2E] hover:file:bg-[#FFE4E6] file:cursor-pointer border border-[#CBD5E1] rounded-xl p-2 bg-white">
                                 @error('bukti_transfer')
                                     <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p>
