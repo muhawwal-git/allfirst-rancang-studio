@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $kelas->judul . ' — Allfirst Rancang Studio')
+@section('title', $kelas->judul)
 @section('meta_description', Str::limit(strip_tags($kelas->deskripsi_singkat ?? $kelas->judul), 160))
 
 @section('content')

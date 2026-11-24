@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Utama Admin — Allfirst Rancang Studio')
+@section('title', 'Dashboard Utama Admin')
 
 @section('content')
     <div class="space-y-6 w-full">

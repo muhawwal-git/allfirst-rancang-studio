@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lupa Kata Sandi — Allfirst Rancang Studio')
+@section('title', 'Lupa Kata Sandi')
 @section('meta_description', 'Pulihkan akses akun Allfirst Rancang Studio Anda melalui tautan reset kata sandi resmi.')
 
 @section('content')

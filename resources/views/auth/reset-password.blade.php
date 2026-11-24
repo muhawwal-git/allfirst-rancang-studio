@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Atur Ulang Kata Sandi — Allfirst Rancang Studio')
+@section('title', 'Atur Ulang Kata Sandi')
 @section('meta_description', 'Buat kata sandi baru untuk akun Allfirst Rancang Studio Anda.')
 
 @section('content')

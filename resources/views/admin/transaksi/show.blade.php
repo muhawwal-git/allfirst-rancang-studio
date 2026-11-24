@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Pemeriksaan Bukti Pembayaran ' . $transaksi->nomor_invoice . ' — Allfirst Rancang Studio')
+@section('title', 'Pemeriksaan Bukti Pembayaran ' . $transaksi->nomor_invoice)
 
 @section('content')
     <!-- A-02b Modal Audit Card View (baiBA) -->

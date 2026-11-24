@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen Kelas Online — Allfirst Rancang Studio')
+@section('title', 'Manajemen Kelas Online')
 
 @section('content')
     <div class="space-y-6 w-full">

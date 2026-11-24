@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Allfirst Rancang Studio — Kursus Software Arsitektur, Sipil & BIM Siap Kerja')
+@section('title', 'Kursus Software Arsitektur, Sipil & BIM Siap Kerja')
 @section('meta_description', 'Studio pelatihan software AutoCAD, SketchUp, Revit BIM, dan Enscape standar konsultan DED perencana. Materi terstruktur, video streaming, dan sertifikat ber-QR.')
 
 @section('content')

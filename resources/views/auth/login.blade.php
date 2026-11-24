@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Masuk ke Akun Anda — Allfirst Rancang Studio')
+@section('title', 'Masuk ke Akun Anda')
 @section('meta_description', 'Masuk ke akun Allfirst Rancang Studio untuk mengakses materi kelas online, video pembelajaran, dan sertifikat kelulusan.')
 
 @section('content')

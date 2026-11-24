@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Siswa — Allfirst Rancang Studio')
+@section('title', 'Dashboard Siswa')
 
 @section('content')
     <!-- SEKSI KELAS SAYA (fill: #FFFFFF, stroke: #E2E8F0) -->

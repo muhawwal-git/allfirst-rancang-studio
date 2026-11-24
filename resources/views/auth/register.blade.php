@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Akun Siswa Baru — Allfirst Rancang Studio')
+@section('title', 'Daftar Akun Siswa Baru')
 @section('meta_description', 'Registrasi akun Allfirst Rancang Studio. Mulai belajar software arsitektur dan teknik sipil standar industri dengan sertifikat digital resmi.')
 
 @section('content')

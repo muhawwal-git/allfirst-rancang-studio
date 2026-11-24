@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pelatihan Tatap Muka (Offline) — Allfirst Rancang Studio')
+@section('title', 'Pelatihan Tatap Muka (Offline)')
 @section('meta_description', 'Informasi program bimbingan teknis tatap muka langsung di studio: AutoCAD, SketchUp, Revit, dan Enscape. Pendaftaran via WhatsApp resmi Allfirst Rancang Studio.')
 
 @section('content')

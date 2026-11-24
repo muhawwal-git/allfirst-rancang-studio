@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Katalog E-Book Gratis — Allfirst Rancang Studio')
+@section('title', 'Katalog E-Book Gratis')
 @section('meta_description', 'Unduh e-book panduan praktis AutoCAD, SketchUp, Revit, dan manajemen gambar kerja arsitektur gratis dari Allfirst Rancang Studio.')
 
 @section('content')

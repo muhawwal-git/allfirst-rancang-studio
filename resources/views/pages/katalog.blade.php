@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Katalog Kelas Online — Allfirst Rancang Studio')
+@section('title', 'Katalog Kelas Online')
 @section('meta_description', 'Katalog pelatihan software arsitektur & sipil: AutoCAD, SketchUp, Revit, dan Enscape. Materi berstandar konsultan DED dengan akses video 1 tahun.')
 
 @section('content')

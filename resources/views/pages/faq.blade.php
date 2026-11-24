@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pertanyaan yang Sering Diajukan (FAQ) — Allfirst Rancang Studio')
+@section('title', 'Pertanyaan yang Sering Diajukan (FAQ)')
 @section('meta_description', 'Jawaban atas pertanyaan umum seputar program kursus online, bimbingan offline, masa aktif 365 hari, sertifikat, dan metode belajar Allfirst Rancang Studio.')
 
 @section('content')

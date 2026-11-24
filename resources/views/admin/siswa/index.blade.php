@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Siswa & Penerbitan Sertifikat — Allfirst Rancang Studio')
+@section('title', 'Data Siswa & Penerbitan Sertifikat')
 
 @section('content')
     <div class="space-y-6 w-full">

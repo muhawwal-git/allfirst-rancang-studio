@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Verifikasi Keaslian Sertifikat — Allfirst Rancang Studio')
+@section('title', 'Verifikasi Keaslian Sertifikat')
 
 @section('content')
     <!-- HERO BANNER (Light Architectural Studio Theme) -->
