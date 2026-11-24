@@ -126,6 +126,18 @@ class AdminManagementTest extends TestCase
         $transaksi->refresh();
         $this->assertSame('ditolak', $transaksi->status_pembayaran);
         $this->assertSame('Struk transfer tidak dapat terbaca dengan jelas.', $transaksi->alasan_penolakan);
+
+        // Student sees rejection reason on invoice detail page and student dashboard
+        $this->actingAs($student)
+            ->get(route('transaksi.show', $transaksi->nomor_invoice))
+            ->assertOk()
+            ->assertSee('Alasan Penolakan Admin:')
+            ->assertSee('Struk transfer tidak dapat terbaca dengan jelas.');
+
+        $this->actingAs($student)
+            ->get(route('student.dashboard'))
+            ->assertOk()
+            ->assertSee('Struk transfer tidak dapat terbaca dengan jelas.');
     }
 
     public function test_admin_can_create_new_course(): void

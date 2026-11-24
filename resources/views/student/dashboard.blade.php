@@ -204,9 +204,14 @@
                                                 Menunggu Pembayaran
                                             </span>
                                         @else
-                                            <span class="px-2.5 py-0.5 rounded text-xs font-semibold text-red-700 bg-red-50 border border-red-200">
+                                            <span class="px-2.5 py-0.5 rounded text-xs font-semibold text-red-700 bg-red-50 border border-red-200 inline-block">
                                                 Ditolak / Batal
                                             </span>
+                                            @if($trx->alasan_penolakan)
+                                                <div class="text-[11px] text-[#D11F2E] mt-1 max-w-[240px] leading-snug">
+                                                    Alasan: {{ $trx->alasan_penolakan }}
+                                                </div>
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-right">
