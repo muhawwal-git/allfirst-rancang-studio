@@ -553,7 +553,14 @@ class AdminManagementTest extends TestCase
             'jenis_kelas' => 'online',
         ]);
 
-        // 1. Opening Kelola Quiz seeds 10 default questions for the course
+        // 0. Default Kelola Quiz landing page is empty until a course is selected from the dropdown
+        $this->actingAs($admin)
+            ->get(route('admin.quiz.index'))
+            ->assertOk()
+            ->assertSee('Belum Ada Kelas yang Dipilih')
+            ->assertDontSee('SOAL 01');
+
+        // 1. Selecting a course in Kelola Quiz seeds/shows the 10 default questions for that course
         $this->actingAs($admin)
             ->get(route('admin.quiz.index', $kelas->id))
             ->assertOk()

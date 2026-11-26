@@ -24,7 +24,7 @@ class AdminQuizController extends Controller
 
         $selectedKelas = ($kelas && $kelas->exists)
             ? $kelas
-            : $onlineCourses->first();
+            : null;
 
         $quizQuestions = $selectedKelas
             ? QuizQuestion::ensureForKelas($selectedKelas)
