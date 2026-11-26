@@ -543,4 +543,63 @@ class AdminManagementTest extends TestCase
             ->assertSee('Dapatkan Software & Bahan Praktik')
             ->assertSee('https://drive.google.com/drive/folders/1jAfbtnk5fqRO4u2JrL0VdIvIYANZDzj2');
     }
+
+    public function test_admin_can_manage_quiz_questions_from_kelola_quiz_page(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $kelas = Kelas::factory()->published()->create([
+            'judul_kelas' => 'SketchUp: Pemodelan 3D Arsitektur',
+            'kategori' => 'SketchUp',
+            'jenis_kelas' => 'online',
+        ]);
+
+        // 1. Opening Kelola Quiz seeds 10 default questions for the course
+        $this->actingAs($admin)
+            ->get(route('admin.quiz.index', $kelas->id))
+            ->assertOk()
+            ->assertSee('Kelola Quiz Evaluasi Akhir')
+            ->assertSee('SOAL 01')
+            ->assertSee('SOAL 10');
+
+        $this->assertSame(10, $kelas->quizQuestions()->count());
+
+        // 2. Admin adds a new question
+        $this->actingAs($admin)
+            ->post(route('admin.quiz.store', $kelas->id), [
+                'pertanyaan' => 'Shortcut apakah untuk mengaktifkan fitur Push/Pull di SketchUp?',
+                'opsi_a' => 'Tombol P',
+                'opsi_b' => 'Tombol M',
+                'opsi_c' => 'Tombol Q',
+                'opsi_d' => 'Tombol L',
+                'jawaban_benar' => 'A',
+                'nomor_urutan' => 11,
+            ])
+            ->assertRedirect(route('admin.quiz.index', $kelas->id));
+
+        $this->assertSame(11, $kelas->quizQuestions()->count());
+
+        // 3. Admin updates an existing question
+        $firstQuestion = $kelas->quizQuestions()->firstOrFail();
+        $this->actingAs($admin)
+            ->put(route('admin.quiz.update', $firstQuestion->id), [
+                'pertanyaan' => 'Pertanyaan SketchUp yang telah diperbarui oleh Admin?',
+                'opsi_a' => 'Pilihan A Baru',
+                'opsi_b' => 'Pilihan B Baru',
+                'opsi_c' => 'Pilihan C Baru',
+                'opsi_d' => 'Pilihan D Baru',
+                'jawaban_benar' => 'C',
+                'nomor_urutan' => 1,
+            ])
+            ->assertRedirect(route('admin.quiz.index', $kelas->id));
+
+        $this->assertSame('Pertanyaan SketchUp yang telah diperbarui oleh Admin?', $firstQuestion->fresh()->pertanyaan);
+        $this->assertSame('C', $firstQuestion->fresh()->jawaban_benar);
+
+        // 4. Admin resets to the 10 standard questions
+        $this->actingAs($admin)
+            ->post(route('admin.quiz.reset', $kelas->id))
+            ->assertRedirect(route('admin.quiz.index', $kelas->id));
+
+        $this->assertSame(10, $kelas->quizQuestions()->count());
+    }
 }

@@ -17,12 +17,8 @@
 <body class="min-h-screen bg-[#F8FAFC] font-sans text-[#0F172A] flex flex-col md:flex-row antialiased">
 
     @php
-        $firstCourseForNav = \App\Models\Kelas::orderBy('id')->first();
-        $kurikulumNavUrl = $firstCourseForNav
-            ? route('admin.kelas.kurikulum', $firstCourseForNav->id)
-            : route('admin.kelas.index');
-        $isKurikulumActive = request()->routeIs('admin.kelas.kurikulum');
-        $isKelolaKelasActive = request()->routeIs('admin.kelas.*') && ! $isKurikulumActive;
+        $isKelolaKelasActive = request()->routeIs('admin.kelas.*');
+        $isKelolaQuizActive = request()->routeIs('admin.quiz.*');
     @endphp
 
     <!-- ADMIN SIDEBAR (pen.dev: fill #0B0F19, pad 24, gap 6, width 260px) -->
@@ -89,16 +85,16 @@
                 <span>Kelola Kelas</span>
             </a>
 
-            <!-- 4. Kurikulum -->
-            <a href="{{ $kurikulumNavUrl }}"
+            <!-- 4. Kelola Quiz -->
+            <a href="{{ route('admin.quiz.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all
-                   {{ $isKurikulumActive
+                   {{ $isKelolaQuizActive
                        ? 'bg-gradient-to-r from-[#D11F2E] to-[#9E111B] text-white font-semibold shadow-sm'
                        : 'text-[#CBD5E1] hover:text-white hover:bg-white/5 font-medium' }}">
-                <svg class="w-4 h-4 shrink-0 {{ $isKurikulumActive ? 'text-white' : 'text-[#94A3B8]' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 12H3m13-6H3m9 12H3m13-6l5 3-5 3v-6z" />
+                <svg class="w-4 h-4 shrink-0 {{ $isKelolaQuizActive ? 'text-white' : 'text-[#94A3B8]' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
-                <span>Kurikulum</span>
+                <span>Kelola Quiz</span>
             </a>
 
             <!-- 5. Testimoni Siswa -->

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Materi;
 use App\Models\Modul;
-use App\Models\QuizQuestion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,48 +15,10 @@ class AdminKurikulumController extends Controller
     public function index(Kelas $kelas): View
     {
         $kelas->load(['moduls.materis']);
-        $quizQuestions = $kelas->isOfflineCatalog()
-            ? collect()
-            : QuizQuestion::ensureForKelas($kelas);
 
         return view('admin.kelas.kurikulum', [
             'kelas' => $kelas,
-            'quizQuestions' => $quizQuestions,
         ]);
-    }
-
-    public function storeQuiz(Request $request, Kelas $kelas): RedirectResponse
-    {
-        $validated = $request->validate([
-            'pertanyaan' => ['required', 'string', 'max:1000'],
-            'opsi_a' => ['required', 'string', 'max:255'],
-            'opsi_b' => ['required', 'string', 'max:255'],
-            'opsi_c' => ['required', 'string', 'max:255'],
-            'opsi_d' => ['required', 'string', 'max:255'],
-            'jawaban_benar' => ['required', 'string', 'in:A,B,C,D'],
-            'nomor_urutan' => ['nullable', 'integer', 'min:1'],
-        ]);
-
-        $order = $validated['nomor_urutan'] ?? ($kelas->quizQuestions()->count() + 1);
-
-        $kelas->quizQuestions()->create([
-            'nomor_urutan' => $order,
-            'pertanyaan' => $validated['pertanyaan'],
-            'opsi_a' => $validated['opsi_a'],
-            'opsi_b' => $validated['opsi_b'],
-            'opsi_c' => $validated['opsi_c'],
-            'opsi_d' => $validated['opsi_d'],
-            'jawaban_benar' => strtoupper($validated['jawaban_benar']),
-        ]);
-
-        return back()->with('success', 'Soal quiz evaluasi baru berhasil ditambahkan.');
-    }
-
-    public function destroyQuiz(QuizQuestion $quizQuestion): RedirectResponse
-    {
-        $quizQuestion->delete();
-
-        return back()->with('success', 'Soal quiz evaluasi berhasil dihapus.');
     }
 
     public function storeModul(Request $request, Kelas $kelas): RedirectResponse

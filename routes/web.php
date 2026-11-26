@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminKelasController;
 use App\Http\Controllers\Admin\AdminKurikulumController;
+use App\Http\Controllers\Admin\AdminQuizController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\AdminTestimoniController;
 use App\Http\Controllers\Admin\AdminTransaksiController;
@@ -98,14 +99,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Manajemen Kelas
     Route::resource('kelas', AdminKelasController::class)->parameters(['kelas' => 'kelas']);
 
-    // Manajemen Modul & Materi (Kurikulum) + Bank Soal Quiz
+    // Manajemen Modul & Materi (Kurikulum)
     Route::get('/kelas/{kelas}/kurikulum', [AdminKurikulumController::class, 'index'])->name('kelas.kurikulum');
     Route::post('/kelas/{kelas}/modul', [AdminKurikulumController::class, 'storeModul'])->name('kelas.modul.store');
     Route::delete('/modul/{modul}', [AdminKurikulumController::class, 'destroyModul'])->name('modul.destroy');
     Route::post('/modul/{modul}/materi', [AdminKurikulumController::class, 'storeMateri'])->name('modul.materi.store');
     Route::delete('/materi/{materi}', [AdminKurikulumController::class, 'destroyMateri'])->name('materi.destroy');
-    Route::post('/kelas/{kelas}/quiz', [AdminKurikulumController::class, 'storeQuiz'])->name('kelas.quiz.store');
-    Route::delete('/quiz/{quizQuestion}', [AdminKurikulumController::class, 'destroyQuiz'])->name('quiz.destroy');
+
+    // Manajemen Bank Soal Quiz Evaluasi Akhir
+    Route::get('/quiz/{kelas?}', [AdminQuizController::class, 'index'])->name('quiz.index');
+    Route::post('/quiz/{kelas}', [AdminQuizController::class, 'store'])->name('quiz.store');
+    Route::put('/quiz/soal/{quizQuestion}', [AdminQuizController::class, 'update'])->name('quiz.update');
+    Route::delete('/quiz/soal/{quizQuestion}', [AdminQuizController::class, 'destroy'])->name('quiz.destroy');
+    Route::post('/quiz/{kelas}/reset', [AdminQuizController::class, 'resetDefault'])->name('quiz.reset');
 
     // Moderasi Rating & Testimoni Siswa
     Route::get('/testimoni', [AdminTestimoniController::class, 'index'])->name('testimoni.index');
