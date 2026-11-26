@@ -71,6 +71,9 @@ class ClassroomController extends Controller
             ->where('user_id', $user->id)
             ->where('kelas_id', $kelas->id)
             ->first();
+        $hasPassedQuiz = $kelas->hasPassedQuizFor($user);
+        $bestQuizAttempt = $kelas->bestQuizAttemptFor($user);
+        $testimoni = $kelas->testimoniFor($user);
 
         return view('student.classroom', [
             'kelas' => $kelas,
@@ -81,6 +84,9 @@ class ClassroomController extends Controller
             'nextMateri' => $nextMateri,
             'progressPercentage' => $progressPercentage,
             'sertifikat' => $sertifikat,
+            'hasPassedQuiz' => $hasPassedQuiz,
+            'bestQuizAttempt' => $bestQuizAttempt,
+            'testimoni' => $testimoni,
             'allMateris' => $allMateris,
         ]);
     }
@@ -131,10 +137,7 @@ class ClassroomController extends Controller
             ->where('sudah_selesai', true)
             ->count();
 
-        // If 100% completed, auto-issue certificate with centralized studio numbering
-        if ($totalMateris > 0 && $completedCount >= $totalMateris) {
-            Sertifikat::issueForStudent($user->id, $kelas->id);
-        }
+        $isAllCompleted = $totalMateris > 0 && $completedCount >= $totalMateris;
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -142,6 +145,10 @@ class ClassroomController extends Controller
                 'is_completed' => true,
                 'progress' => $kelas->progressPercentageFor($user),
             ]);
+        }
+
+        if ($isAllCompleted) {
+            return back()->with('status', 'Seluruh materi video telah selesai (100%)! Silakan kerjakan Quiz Evaluasi Akhir untuk mengklaim sertifikat kelulusan Anda.');
         }
 
         return back()->with('status', 'Pelajaran berhasil diselesaikan!');

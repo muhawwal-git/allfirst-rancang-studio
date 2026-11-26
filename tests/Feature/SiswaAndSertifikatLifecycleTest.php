@@ -7,7 +7,9 @@ use App\Models\Kelas;
 use App\Models\Materi;
 use App\Models\Modul;
 use App\Models\PengaturanSitus;
+use App\Models\QuizQuestion;
 use App\Models\Sertifikat;
+use App\Models\Testimoni;
 use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -268,7 +270,8 @@ class SiswaAndSertifikatLifecycleTest extends TestCase
     public function test_end_to_end_online_student_auto_certificate_generation_upon_100_percent_completion(): void
     {
         $student = User::factory()->student()->create(['name' => 'Putri Maharani, S.Ars']);
-        $kelas = Kelas::factory()->published()->create();
+        $admin = User::factory()->admin()->create();
+        $kelas = Kelas::factory()->published()->create(['kategori' => 'Revit']);
         $modul = Modul::factory()->create(['kelas_id' => $kelas->id, 'nomor_urutan' => 1]);
         $m1 = Materi::factory()->create(['modul_id' => $modul->id, 'nomor_urutan' => 1]);
         $m2 = Materi::factory()->create(['modul_id' => $modul->id, 'nomor_urutan' => 2]);
@@ -282,18 +285,69 @@ class SiswaAndSertifikatLifecycleTest extends TestCase
 
         PengaturanSitus::setValue('sertifikat_nomor_terakhir', '30');
 
-        // Completing 1st of 2 lessons (50%) -> certificate not yet issued
+        // 1. Completing 1st of 2 lessons (50%) -> quiz locked & certificate not yet issued
         $this->actingAs($student)->post(route('student.materi.complete', $m1->id))->assertRedirect();
+        $this->actingAs($student)->get(route('student.quiz.show', $kelas->slug))->assertRedirect(route('student.classroom', $kelas->slug));
         $this->assertDatabaseMissing('sertifikats', ['user_id' => $student->id, 'kelas_id' => $kelas->id]);
 
-        // Completing 2nd of 2 lessons (100%) -> auto-issues certificate 031-ARS... with default 'Baik' (80)
+        // 2. Completing 2nd of 2 lessons (100%) -> unlocks quiz, certificate still gated behind quiz & testimonial
         $this->actingAs($student)->post(route('student.materi.complete', $m2->id))->assertRedirect();
+        $this->assertDatabaseMissing('sertifikats', ['user_id' => $student->id, 'kelas_id' => $kelas->id]);
+
+        // 3. Failing quiz (< 70) does not unlock testimonial/certificate
+        $questions = QuizQuestion::ensureForKelas($kelas);
+        $this->assertCount(10, $questions);
+
+        $wrongAnswers = $questions->mapWithKeys(fn ($q) => [$q->id => ($q->jawaban_benar === 'A' ? 'D' : 'A')])->all();
+        $this->actingAs($student)
+            ->post(route('student.quiz.submit', $kelas->slug), ['answers' => $wrongAnswers])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
+
+        $this->actingAs($student)
+            ->post(route('student.quiz.testimoni', $kelas->slug), [
+                'rating' => 5,
+                'profesi' => 'Junior Architect',
+                'ulasan' => 'Mencoba klaim sebelum lulus quiz.',
+            ])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
+        $this->assertDatabaseMissing('sertifikats', ['user_id' => $student->id, 'kelas_id' => $kelas->id]);
+
+        // 4. Passing quiz with 80/100 (8 correct out of 10)
+        $eightCorrectAnswers = $questions->values()->mapWithKeys(function ($q, $idx) {
+            return [$q->id => $idx < 8 ? $q->jawaban_benar : ($q->jawaban_benar === 'A' ? 'D' : 'A')];
+        })->all();
+
+        $this->actingAs($student)
+            ->post(route('student.quiz.submit', $kelas->slug), ['answers' => $eightCorrectAnswers])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
+
+        // 5. Submitting rating & testimonial issues certificate 031-ARS... with score 80 ('Baik')
+        $this->actingAs($student)
+            ->post(route('student.quiz.testimoni', $kelas->slug), [
+                'rating' => 5,
+                'profesi' => 'Arsitek Muda',
+                'ulasan' => 'Alur pemodelan BIM Revit di Allfirst Studio sangat aplikatif dan mudah diikuti!',
+            ])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
 
         $cert = Sertifikat::query()->where('user_id', $student->id)->where('kelas_id', $kelas->id)->first();
         $this->assertNotNull($cert);
         $this->assertSame(sprintf('031-ARS%s-%s/MKS/%s', date('y'), date('m'), date('Y')), $cert->nomor_sertifikat);
         $this->assertSame('Baik', $cert->predikat);
         $this->assertSame(80, $cert->nilai);
+
+        // 6. Admin moderates testimonial to feature on Homepage
+        $testimoni = Testimoni::query()->where('user_id', $student->id)->where('kelas_id', $kelas->id)->firstOrFail();
+        $this->assertFalse($testimoni->tampil_beranda);
+
+        $this->actingAs($admin)
+            ->post(route('admin.testimoni.toggle', $testimoni->id))
+            ->assertRedirect();
+
+        $this->assertTrue($testimoni->fresh()->tampil_beranda);
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Alur pemodelan BIM Revit di Allfirst Studio sangat aplikatif dan mudah diikuti!');
     }
 
     public function test_admin_can_control_bonus_online_class_access_for_offline_students_on_registration_approval_and_directory(): void

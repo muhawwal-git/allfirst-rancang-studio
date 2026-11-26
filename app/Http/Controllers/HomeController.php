@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\PengaturanSitus;
+use App\Models\Testimoni;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -66,7 +68,22 @@ class HomeController extends Controller
             'gambar' => $promoGambar ?: null,
         ];
 
-        $testimonials = collect(config('allfirst.testimonials'));
+        $featuredTestimonis = collect();
+        if (Schema::hasTable('testimonis')) {
+            $featuredTestimonis = Testimoni::query()
+                ->with(['user', 'kelas'])
+                ->where('tampil_beranda', true)
+                ->latest('id')
+                ->get()
+                ->map(fn (Testimoni $item): array => [
+                    'quote' => $item->ulasan,
+                    'name' => $item->user?->name ?? 'Alumni Allfirst Studio',
+                    'course' => ($item->profesi ? $item->profesi.' · ' : '').($item->kelas?->judul ?? 'Alumni Studio'),
+                    'rating' => $item->rating,
+                ]);
+        }
+
+        $testimonials = $featuredTestimonis->concat(collect(config('allfirst.testimonials')))->values();
 
         return view('pages.home', [
             'featuredCourses' => $featuredCourses,
@@ -77,7 +94,7 @@ class HomeController extends Controller
             'heroDescription' => $heroDescription,
             'promoPopup' => $promoPopup,
             'testimonialRowTop' => $testimonials->take(4),
-            'testimonialRowBottom' => $testimonials->slice(4)->values(),
+            'testimonialRowBottom' => $testimonials->slice(4, 4)->values()->whenEmpty(fn () => $testimonials->take(4)),
         ]);
     }
 }

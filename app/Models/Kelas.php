@@ -70,6 +70,59 @@ class Kelas extends Model
         return $this->hasMany(Sertifikat::class);
     }
 
+    public function quizQuestions(): HasMany
+    {
+        return $this->hasMany(QuizQuestion::class)->orderBy('nomor_urutan')->orderBy('id');
+    }
+
+    public function quizAttempts(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class);
+    }
+
+    public function testimonis(): HasMany
+    {
+        return $this->hasMany(Testimoni::class);
+    }
+
+    public function passingGrade(): int
+    {
+        return 70;
+    }
+
+    public function bestQuizAttemptFor(User $user): ?QuizAttempt
+    {
+        return $this->quizAttempts()
+            ->where('user_id', $user->id)
+            ->orderByDesc('lulus')
+            ->orderByDesc('skor')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    public function latestQuizAttemptFor(User $user): ?QuizAttempt
+    {
+        return $this->quizAttempts()
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->first();
+    }
+
+    public function hasPassedQuizFor(User $user): bool
+    {
+        return $this->quizAttempts()
+            ->where('user_id', $user->id)
+            ->where('lulus', true)
+            ->exists();
+    }
+
+    public function testimoniFor(User $user): ?Testimoni
+    {
+        return $this->testimonis()
+            ->where('user_id', $user->id)
+            ->first();
+    }
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status_publikasi', 'published');

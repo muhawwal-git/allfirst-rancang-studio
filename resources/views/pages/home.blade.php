@@ -276,7 +276,10 @@
                                     <div class="w-[300px] sm:w-[360px] shrink-0 bg-white rounded-2xl border border-[#F1F5F9] p-6 shadow-[0_8px_25px_-5px_rgba(15,23,42,0.05)] hover:shadow-md transition-shadow flex flex-col justify-between">
                                         <div class="space-y-3">
                                             <div class="flex items-center justify-between">
-                                                <span class="text-[#F59E0B] text-sm tracking-wider">★★★★★</span>
+                                                @php
+                                                    $starsCount = max(1, min(5, (int) ($testi['rating'] ?? 5)));
+                                                @endphp
+                                                <span class="text-[#F59E0B] text-sm tracking-wider">{{ str_repeat('★', $starsCount) }}{{ str_repeat('☆', 5 - $starsCount) }}</span>
                                                 <span class="text-2xl text-[#FECDD3] font-serif leading-none">❞</span>
                                             </div>
                                             <p class="text-sm text-[#334155] leading-relaxed">
@@ -317,7 +320,10 @@
                                     <div class="w-[300px] sm:w-[360px] shrink-0 bg-white rounded-2xl border border-[#F1F5F9] p-6 shadow-[0_8px_25px_-5px_rgba(15,23,42,0.05)] hover:shadow-md transition-shadow flex flex-col justify-between">
                                         <div class="space-y-3">
                                             <div class="flex items-center justify-between">
-                                                <span class="text-[#F59E0B] text-sm tracking-wider">★★★★★</span>
+                                                @php
+                                                    $starsCount = max(1, min(5, (int) ($testi['rating'] ?? 5)));
+                                                @endphp
+                                                <span class="text-[#F59E0B] text-sm tracking-wider">{{ str_repeat('★', $starsCount) }}{{ str_repeat('☆', 5 - $starsCount) }}</span>
                                                 <span class="text-2xl text-[#FECDD3] font-serif leading-none">❞</span>
                                             </div>
                                             <p class="text-sm text-[#334155] leading-relaxed">

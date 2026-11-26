@@ -6,6 +6,7 @@ use App\Models\AksesKelas;
 use App\Models\Kelas;
 use App\Models\Materi;
 use App\Models\Modul;
+use App\Models\QuizQuestion;
 use App\Models\Sertifikat;
 use App\Models\Transaksi;
 use App\Models\User;
@@ -199,10 +200,10 @@ class CheckoutAndStudentClassroomTest extends TestCase
         ]);
     }
 
-    public function test_marking_all_lessons_complete_auto_generates_certificate(): void
+    public function test_marking_all_lessons_complete_unlocks_quiz_and_testimonial_before_certificate_generation(): void
     {
         $user = User::factory()->student()->create();
-        $kelas = Kelas::factory()->published()->create();
+        $kelas = Kelas::factory()->published()->create(['kategori' => 'AutoCAD']);
         $modul = Modul::factory()->create(['kelas_id' => $kelas->id]);
         $materi = Materi::factory()->create(['modul_id' => $modul->id]);
 
@@ -212,13 +213,49 @@ class CheckoutAndStudentClassroomTest extends TestCase
             'status_akses' => 'aktif',
         ]);
 
+        // 1. Completing 100% video lessons unlocks the quiz (certificate is not yet issued)
         $response = $this->actingAs($user)->post(route('student.materi.complete', $materi->id));
-
         $response->assertRedirect();
+        $this->assertDatabaseMissing('sertifikats', [
+            'user_id' => $user->id,
+            'kelas_id' => $kelas->id,
+        ]);
+
+        // 2. Opening the Quiz Arena seeds 10 technical questions for the course
+        $quizPage = $this->actingAs($user)->get(route('student.quiz.show', $kelas->slug));
+        $quizPage->assertOk();
+        $quizPage->assertSee('SOAL 01 DARI 10');
+
+        $questions = QuizQuestion::ensureForKelas($kelas);
+        $this->assertCount(10, $questions);
+
+        // 3. Submitting correct answers passes the quiz
+        $correctAnswers = $questions->mapWithKeys(fn ($q) => [$q->id => $q->jawaban_benar])->all();
+        $this->actingAs($user)
+            ->post(route('student.quiz.submit', $kelas->slug), ['answers' => $correctAnswers])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
+
+        $this->assertDatabaseHas('quiz_attempts', [
+            'user_id' => $user->id,
+            'kelas_id' => $kelas->id,
+            'skor' => 100,
+            'lulus' => true,
+        ]);
+
+        // 4. Submitting rating & testimonial auto-issues the official certificate
+        $this->actingAs($user)
+            ->post(route('student.quiz.testimoni', $kelas->slug), [
+                'rating' => 5,
+                'profesi' => 'Drafter Arsitektur',
+                'ulasan' => 'Materi AutoCAD sangat terstruktur dan langsung siap pakai untuk proyek DED.',
+            ])
+            ->assertRedirect(route('student.quiz.show', $kelas->slug));
 
         $this->assertDatabaseHas('sertifikats', [
             'user_id' => $user->id,
             'kelas_id' => $kelas->id,
+            'nilai' => 100,
+            'predikat' => 'Sangat Baik',
         ]);
     }
 

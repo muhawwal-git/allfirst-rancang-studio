@@ -98,13 +98,18 @@
                                     </svg>
                                 </a>
 
-                                @if($progress >= 100 || $cert)
-                                    <a href="{{ route('student.sertifikat.show', $cert ? $cert->nomor_sertifikat : $kelas->slug) }}"
+                                @if($cert)
+                                    <a href="{{ route('student.sertifikat.show', $cert->nomor_sertifikat) }}"
                                        class="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-xs font-semibold text-[#0F172A] bg-white border border-[#E2E8F0] hover:bg-slate-50 transition-colors shadow-sm">
                                         <svg class="w-3.5 h-3.5 text-[#D11F2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                                         </svg>
                                         <span>Lihat Sertifikat</span>
+                                    </a>
+                                @elseif($progress >= 100)
+                                    <a href="{{ route('student.quiz.show', $kelas->slug) }}"
+                                       class="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-xs font-semibold text-[#D11F2E] bg-[#FFF1F2] border border-[#FECDD3] hover:bg-[#FFE4E6] transition-colors shadow-sm">
+                                        <span>Quiz &amp; Klaim Sertifikat &rarr;</span>
                                     </a>
                                 @endif
                             @elseif($akses->status_akses === 'nonaktif' && $akses->isOffline())

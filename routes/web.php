@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminKelasController;
 use App\Http\Controllers\Admin\AdminKurikulumController;
 use App\Http\Controllers\Admin\AdminSiswaController;
+use App\Http\Controllers\Admin\AdminTestimoniController;
 use App\Http\Controllers\Admin\AdminTransaksiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\PreviewVideoController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\StudentQuizController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +65,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/student/kelas/{kelas:slug}/materi/{materi}/stream', [ClassroomController::class, 'stream'])->name('student.materi.stream');
     Route::post('/student/materi/{materi}/progress', [ClassroomController::class, 'saveProgress'])->name('student.materi.progress');
     Route::post('/student/materi/{materi}/complete', [ClassroomController::class, 'markComplete'])->name('student.materi.complete');
+    Route::get('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'show'])->name('student.quiz.show');
+    Route::post('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz.submit');
+    Route::post('/student/kelas/{kelas:slug}/testimoni', [StudentQuizController::class, 'submitTestimoni'])->name('student.quiz.testimoni');
     Route::get('/student/sertifikat/{sertifikat}', [SertifikatController::class, 'show'])
         ->where('sertifikat', '.*')
         ->name('student.sertifikat.show');
@@ -93,10 +98,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Manajemen Kelas
     Route::resource('kelas', AdminKelasController::class)->parameters(['kelas' => 'kelas']);
 
-    // Manajemen Modul & Materi (Kurikulum)
+    // Manajemen Modul & Materi (Kurikulum) + Bank Soal Quiz
     Route::get('/kelas/{kelas}/kurikulum', [AdminKurikulumController::class, 'index'])->name('kelas.kurikulum');
     Route::post('/kelas/{kelas}/modul', [AdminKurikulumController::class, 'storeModul'])->name('kelas.modul.store');
     Route::delete('/modul/{modul}', [AdminKurikulumController::class, 'destroyModul'])->name('modul.destroy');
     Route::post('/modul/{modul}/materi', [AdminKurikulumController::class, 'storeMateri'])->name('modul.materi.store');
     Route::delete('/materi/{materi}', [AdminKurikulumController::class, 'destroyMateri'])->name('materi.destroy');
+    Route::post('/kelas/{kelas}/quiz', [AdminKurikulumController::class, 'storeQuiz'])->name('kelas.quiz.store');
+    Route::delete('/quiz/{quizQuestion}', [AdminKurikulumController::class, 'destroyQuiz'])->name('quiz.destroy');
+
+    // Moderasi Rating & Testimoni Siswa
+    Route::get('/testimoni', [AdminTestimoniController::class, 'index'])->name('testimoni.index');
+    Route::post('/testimoni/{testimoni}/toggle-beranda', [AdminTestimoniController::class, 'toggleBeranda'])->name('testimoni.toggle');
+    Route::delete('/testimoni/{testimoni}', [AdminTestimoniController::class, 'destroy'])->name('testimoni.destroy');
 });
