@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- SEKSI KELAS SAYA (fill: #FFFFFF, stroke: #E2E8F0) -->
-    <section class="bg-white py-12 sm:py-16 border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
+    <section class="bg-white py-8 sm:py-10 border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <!-- Header Kelas Saya -->
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div class="space-y-1.5">
@@ -152,7 +152,7 @@
     </section>
 
     <!-- SEKSI TRANSAKSI SAYA (fill: #F8FAFC) -->
-    <section class="bg-[#F8FAFC] py-12 sm:py-16 border-b border-[#E2E8F0]">
+    <section class="bg-[#F8FAFC] py-8 sm:py-10 border-b border-[#E2E8F0]">
         <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <h2 class="text-xl sm:text-2xl font-bold font-heading text-[#0F172A]">
                 Riwayat Transaksi &amp; Pembayaran

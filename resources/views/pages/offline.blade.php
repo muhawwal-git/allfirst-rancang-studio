@@ -5,12 +5,12 @@
 
 @section('content')
     <!-- HERO OFFLINE (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
-    <section class="relative py-14 sm:py-20 border-b border-[#F1F5F9] overflow-hidden"
+    <section class="relative pt-8 pb-8 sm:pt-10 sm:pb-10 border-b border-[#F1F5F9] overflow-hidden"
              style="background-image: linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);">
         <div class="pointer-events-none absolute inset-0 "
              style="background-image: url('{{ asset('images/bg-cad-grid-hero.png') }}?v=5'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;"></div>
         <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20">
-            <div class="max-w-3xl space-y-5">
+            <div class="max-w-3xl space-y-4">
                 <!-- Badge Pelatihan Tatap Muka di Studio -->
                 <div class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#FFF1F2] border border-[#FFE4E6] text-xs font-semibold text-[#D11F2E]">
                     <span>Pelatihan Tatap Muka di Studio</span>
@@ -60,8 +60,8 @@
     </section>
 
     <!-- SEKSI PILIHAN PROGRAM (fill: #FFFFFF, stroke: #E2E8F0) -->
-    <section class="bg-white py-14 sm:py-18 border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-10">
+    <section class="bg-white py-9 sm:py-11 border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <div class="flex flex-wrap items-center gap-3">
                 <span class="px-3 py-1 rounded-full text-xs font-mono font-bold text-[#D11F2E] bg-[#FFF1F2] border border-[#FFE4E6]">
                     KELAS REGULER STUDIO
@@ -149,8 +149,8 @@
 
     <!-- SEKSI KATALOG & PENDAFTARAN KELAS OFFLINE STUDIO (+ BONUS AKSES KELAS ONLINE) -->
     @if(isset($courses) && ($courses->isNotEmpty() || !empty($selectedCategory)))
-        <section id="daftar-program-offline" class="bg-[#F8FAFC] py-14 sm:py-18 border-b border-[#E2E8F0]">
-            <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
+        <section id="daftar-program-offline" class="bg-[#F8FAFC] py-10 sm:py-12 border-b border-[#E2E8F0]">
+            <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div class="space-y-1.5">
                         <span class="text-xs font-mono font-bold text-[#D11F2E] uppercase tracking-wider block">
@@ -299,8 +299,8 @@
     @endif
 
     <!-- SEKSI ALUR PENDAFTARAN (fill: #FFFFFF) -->
-    <section class="bg-white py-14 sm:py-18 border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-10">
+    <section class="bg-white py-10 sm:py-12 border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-[#0F172A]">
                     Alur Pendaftaran via WhatsApp
@@ -367,7 +367,7 @@
     </section>
 
     <!-- BANNER PENUTUP OFFLINE (fill: #F8FAFC, stroke: #E2E8F0) -->
-    <section class="bg-[#F8FAFC] py-14 sm:py-18">
+    <section class="bg-[#F8FAFC] py-10 sm:py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
             <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-[#0F172A]">
                 Siap Memulai Pelatihan Tatap Muka?

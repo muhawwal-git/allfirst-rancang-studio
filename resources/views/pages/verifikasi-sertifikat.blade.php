@@ -4,23 +4,23 @@
 
 @section('content')
     <!-- HERO BANNER (Light Architectural Studio Theme) -->
-    <section class="relative bg-white text-slate-900 pt-14 pb-16 border-b border-[#E2E8F0]">
+    <section class="relative bg-white text-slate-900 pt-8 pb-8 sm:pt-10 sm:pb-9 border-b border-[#E2E8F0]">
         <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20 text-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#F1F5F9] border border-[#E2E8F0] text-xs font-mono text-[#D11F2E] mb-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#F1F5F9] border border-[#E2E8F0] text-xs font-mono text-[#D11F2E] mb-3">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#D11F2E]"></span>
                 [PUBLIC REGISTRY: CERTIFICATE AUTHENTICATION]
             </div>
             <h1 class="text-3xl sm:text-4xl font-extrabold font-heading text-[#0F172A] tracking-tight">
                 Verifikasi Keaslian Sertifikat Digital
             </h1>
-            <p class="text-[#475569] text-sm sm:text-base mt-3 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-[#475569] text-sm sm:text-base mt-2.5 max-w-2xl mx-auto leading-relaxed">
                 Pusat validasi data kelulusan resmi Allfirst Rancang Studio untuk memastikan keaslian kredensial kompetensi peserta pelatihan AEC.
             </p>
         </div>
     </section>
 
     <!-- VERIFICATION RESULT CONTAINER -->
-    <section class="py-16 bg-[#F8FAFC] min-h-[500px]">
+    <section class="pt-7 pb-12 sm:pt-8 sm:pb-16 bg-[#F8FAFC] min-h-[500px]">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
             @if($sertifikat)

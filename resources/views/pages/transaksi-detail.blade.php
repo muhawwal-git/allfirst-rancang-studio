@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- PEMBAYARAN BODY (fill: #F8FAFC) -->
-    <div class="bg-[#F8FAFC] py-12 sm:py-16 min-h-screen border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
+    <div class="bg-[#F8FAFC] py-8 sm:py-10 min-h-screen border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <!-- Header Row -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-6">
                 <div>

@@ -5,12 +5,12 @@
 
 @section('content')
     <!-- HERO FAQ (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
-    <section class="relative py-14 sm:py-20 border-b border-[#F1F5F9] overflow-hidden"
+    <section class="relative pt-8 pb-7 sm:pt-10 sm:pb-9 border-b border-[#F1F5F9] overflow-hidden"
              style="background-image: linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);">
         <div class="pointer-events-none absolute inset-0 "
              style="background-image: url('{{ asset('images/bg-cad-grid-hero.png') }}?v=5'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;"></div>
         <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20">
-            <div class="max-w-3xl space-y-4">
+            <div class="max-w-3xl space-y-3">
                 <!-- Badge FAQ -->
                 <div class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#FFF1F2] border border-[#FFE4E6] text-xs font-semibold text-[#D11F2E]">
                     <span>PUSAT INFORMASI &amp; TANYA JAWAB (FAQ)</span>
@@ -30,7 +30,7 @@
     </section>
 
     <!-- FAQ LIST SECTION (fill: #FAFAFC) -->
-    <section class="bg-[#FAFAFC] py-16 sm:py-20 border-b border-[#E2E8F0]">
+    <section class="bg-[#FAFAFC] pt-6 pb-12 sm:pt-8 sm:pb-16 border-b border-[#E2E8F0]">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- FAQ Accordion Items -->
             <div class="space-y-4">
@@ -56,7 +56,7 @@
             </div>
 
             <!-- FAQ Bottom CTA (fill: #FFFFFF, stroke: #F1F5F9) -->
-            <div class="bg-white rounded-2xl border border-[#F1F5F9] shadow-sm p-8 sm:p-10 text-center space-y-4 mt-12">
+            <div class="bg-white rounded-2xl border border-[#F1F5F9] shadow-sm p-8 sm:p-10 text-center space-y-4">
                 <h3 class="text-xl sm:text-2xl font-bold font-heading text-[#0F172A]">
                     Masih Punya Pertanyaan Lain?
                 </h3>

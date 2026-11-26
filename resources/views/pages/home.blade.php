@@ -5,7 +5,7 @@
 
 @section('content')
     <!-- HERO SECTION (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
-    <section class="relative pt-14 pb-16 md:pt-18 md:pb-22 border-b border-[#F1F5F9] overflow-hidden"
+    <section class="relative pt-10 pb-12 md:pt-12 md:pb-14 border-b border-[#F1F5F9] overflow-hidden"
              style="background-image: linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);">
         <!-- 4-Sided Radial-Faded CAD Grid Overlay (Never cropped at top/bottom/left/right) -->
         <div class="pointer-events-none absolute inset-0 "
@@ -136,7 +136,7 @@
     </div>
 
     <!-- SEKSI PENGANTAR KELAS OFFLINE (fill: #FFFFFF, stroke: #E2E8F0) -->
-    <section class="bg-white border-b border-[#E2E8F0] py-12">
+    <section class="bg-white border-b border-[#E2E8F0] py-9 sm:py-10">
         <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div class="space-y-2 max-w-4xl">
@@ -153,8 +153,8 @@
     </section>
 
     <!-- SEKSI KELAS ONLINE PILIHAN (fill: #F8FAFC — Clean solid background per PDF) -->
-    <section class="bg-[#F8FAFC] py-16 sm:py-20 border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-10">
+    <section class="bg-[#F8FAFC] py-10 sm:py-12 border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <!-- Section Header -->
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div class="space-y-1.5">
@@ -241,11 +241,11 @@
     </section>
 
     <!-- SEKSI TESTIMONI ALUMNI (Dual-Row Marquee, fill: #FFFFFF + subtle radial-faded bg-cad-grid-testi.png) -->
-    <section class="relative bg-white py-16 sm:py-20 overflow-hidden">
+    <section class="relative bg-white py-10 sm:py-12 overflow-hidden">
         <!-- 4-Sided Radial-Faded CAD Grid Overlay (Never cropped at top/bottom/left/right) -->
         <div class="pointer-events-none absolute inset-0 "
              style="background-image: url('{{ asset('images/bg-cad-grid-testi.png') }}?v=5'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;"></div>
-        <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20 mb-10">
+        <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20 mb-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <!-- Title Group -->
                 <div class="space-y-1.5">

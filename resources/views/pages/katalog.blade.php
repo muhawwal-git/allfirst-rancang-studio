@@ -5,13 +5,13 @@
 
 @section('content')
     <!-- HERO KATALOG (Header Only with subtle radial-faded CAD grid per UI Design PDF) -->
-    <section class="relative py-14 sm:py-18 border-b border-[#F1F5F9] overflow-hidden"
+    <section class="relative pt-8 pb-7 sm:pt-10 sm:pb-9 border-b border-[#F1F5F9] overflow-hidden"
              style="background-image: linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);">
         <!-- 4-Sided Radial-Faded CAD Grid Overlay -->
         <div class="pointer-events-none absolute inset-0 "
              style="background-image: url('{{ asset('images/bg-cad-grid-hero.png') }}?v=5'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;"></div>
         <div class="relative w-full px-4 sm:px-8 lg:px-14 xl:px-20">
-            <div class="max-w-3xl space-y-4">
+            <div class="max-w-3xl space-y-3">
                 <!-- Badge Direktori Kelas Mandiri -->
                 <div class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#FFF1F2] border border-[#FFE4E6] text-xs font-semibold text-[#D11F2E] uppercase tracking-wide">
                     <span>DIREKTORI KELAS MANDIRI &middot; AKSES 1 TAHUN</span>
@@ -31,8 +31,8 @@
     </section>
 
     <!-- KATALOG GRID SECTION (Clean solid #F8FAFC background without CAD grid per UI Design PDF) -->
-    <section class="bg-[#F8FAFC] py-12 sm:py-16 min-h-[600px] border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
+    <section class="bg-[#F8FAFC] pt-6 pb-12 sm:pt-8 sm:pb-16 min-h-[600px] border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <!-- Filter Bar (fill: #FFFFFF, stroke: #E2E8F0) -->
             <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 sm:p-5 shadow-sm flex flex-wrap items-center gap-2.5 sm:gap-3">
                 <span class="text-sm font-bold text-[#0F172A] pr-2">

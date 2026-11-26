@@ -5,7 +5,7 @@
 
 @section('content')
     <!-- DETAIL TOP SECTION (fill: linear-gradient(#FFFFFF, #FFF7F7, #F8FAFC) + subtle radial-faded CAD grid overlay) -->
-    <section class="relative py-12 sm:py-16 border-b border-[#F1F5F9] overflow-hidden"
+    <section class="relative py-8 sm:py-10 border-b border-[#F1F5F9] overflow-hidden"
              style="background-image: linear-gradient(145deg, #FFFFFF 0%, #FFF7F7 55%, #F8FAFC 100%);">
         <div class="pointer-events-none absolute inset-0 "
              style="background-image: url('{{ asset('images/bg-cad-grid-hero.png') }}?v=5'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;"></div>
@@ -113,7 +113,7 @@
     </section>
 
     <!-- DESKRIPSI & MANFAAT (fill: #FFFFFF, stroke: #E2E8F0) -->
-    <section class="bg-white py-14 sm:py-18 border-b border-[#E2E8F0]">
+    <section class="bg-white py-10 sm:py-12 border-b border-[#E2E8F0]">
         <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
 
@@ -188,8 +188,8 @@
     </section>
 
     <!-- SEKSI SILABUS (fill: #F8FAFC) -->
-    <section class="bg-[#F8FAFC] py-14 sm:py-18 border-b border-[#E2E8F0]">
-        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-8">
+    <section class="bg-[#F8FAFC] py-10 sm:py-12 border-b border-[#E2E8F0]">
+        <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 space-y-6">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-[#0F172A]">
                     Silabus Kelas
