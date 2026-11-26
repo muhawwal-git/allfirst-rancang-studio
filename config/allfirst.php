@@ -26,7 +26,7 @@ return [
         'Umum / Pencari Kerja',
     ],
 
-    'kategori_software' => ['AutoCAD', 'SketchUp', 'Revit', 'Enscape'],
+    'kategori_software' => ['AutoCAD', 'SketchUp', 'Revit', 'Enscape', 'Lainnya'],
 
     'admin_whatsapp' => '6285190367139',
 

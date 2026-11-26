@@ -327,6 +327,91 @@ class QuizQuestion extends Model
             ];
         }
 
+        if (str_contains($normalized, 'lain')) {
+            return [
+                [
+                    'pertanyaan' => 'Apa fungsi utama dokumen Detail Engineering Design (DED) dalam pelaksanaan proyek arsitektur dan konstruksi?',
+                    'opsi_a' => 'Menjadi acuan gambar kerja teknis yang detail dan presisi bagi pelaksana di lapangan serta dasar perhitungan volume RAB',
+                    'opsi_b' => 'Hanya digunakan sebagai brosur promosi penjualan',
+                    'opsi_c' => 'Menggantikan fungsi izin mendirikan bangunan tanpa ukuran teknis',
+                    'opsi_d' => 'Menghilangkan kebutuhan pengawasan proyek di lapangan',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Dalam penyusunan Rencana Anggaran Biaya (RAB) konstruksi, apakah yang dimaksud dengan AHSP (Analisis Harga Satuan Pekerjaan)?',
+                    'opsi_a' => 'Perhitungan kebutuhan koefisien bahan, upah tenaga kerja, dan peralatan untuk menyelesaikan satu satuan volume pekerjaan',
+                    'opsi_b' => 'Daftar nama pemilik proyek dan kontraktor',
+                    'opsi_c' => 'Sketsa perspektif kasar bangunan tanpa skala',
+                    'opsi_d' => 'Jadwal libur pekerja proyek',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Skala gambar manakah yang paling lazim digunakan untuk menyajikan Gambar Denah, Tampak, dan Potongan Utama bangunan rumah tinggal pada dokumen DED?',
+                    'opsi_a' => 'Skala 1:100',
+                    'opsi_b' => 'Skala 1:10.000',
+                    'opsi_c' => 'Skala 1:2',
+                    'opsi_d' => 'Tanpa skala sama sekali',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Mengapa gambar Detail Arsitektur (seperti detail kusen, tangga, atau kamar mandi) disajikan dengan skala lebih besar seperti 1:20 atau 1:10?',
+                    'opsi_a' => 'Agar dimensi komponen, sambungan material, dan spesifikasi teknis terlihat jelas serta akurat saat dikerjakan tukang',
+                    'opsi_b' => 'Supaya jumlah halaman kertas terlihat lebih sedikit',
+                    'opsi_c' => 'Karena tidak memiliki ukuran milimeter',
+                    'opsi_d' => 'Untuk menyembunyikan informasi material bangunan',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Apa tujuan utama pembuatan Kurva-S (S-Curve) dan Time Schedule dalam manajemen proyek konstruksi?',
+                    'opsi_a' => 'Memantau bobot progres rencana terhadap realisasi pelaksanaan pekerjaan proyek dari minggu ke minggu',
+                    'opsi_b' => 'Menentukan warna cat dinding eksterior',
+                    'opsi_c' => 'Mengukur kekuatan gempa tanah secara langsung',
+                    'opsi_d' => 'Mengganti fungsi gambar struktur pondasi',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Informasi apakah yang wajib tercantum di dalam Kop Gambar (Title Block) standar konsultan perencana?',
+                    'opsi_a' => 'Nama proyek, judul gambar, skala, nomor lembar, tanggal, serta nama/paraf drafter dan penanggung jawab',
+                    'opsi_b' => 'Hanya logo studio tanpa judul gambar',
+                    'opsi_c' => 'Daftar harga tanah di seluruh kota',
+                    'opsi_d' => 'Riwayat pendidikan pemilik rumah',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Dalam koordinasi gambar kerja, mengapa grid As Bangunan (sumbu huruf A-B-C dan angka 1-2-3) harus konsisten antara gambar Arsitektur, Struktur, dan MEP?',
+                    'opsi_a' => 'Agar posisi kolom, dinding, serta jalur pemipaan/instalasi tepat saling bersesuaian tanpa berbenturan di lapangan',
+                    'opsi_b' => 'Hanya sebagai hiasan bingkai kertas gambar',
+                    'opsi_c' => 'Agar ukuran bangunan berubah-ubah di setiap lantai',
+                    'opsi_d' => 'Supaya gambar tidak bisa dibaca oleh tim struktur',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Apakah yang dimaksud dengan As-Built Drawing pada tahap akhir serah terima proyek konstruksi?',
+                    'opsi_a' => 'Gambar rekaman akhir yang merepresentasikan kondisi aktual bangunan sesuai yang benar-benar terbangun di lapangan',
+                    'opsi_b' => 'Sketsa ide awal sebelum survei lokasi',
+                    'opsi_c' => 'Gambar konsep yang belum disetujui pemilik proyek',
+                    'opsi_d' => 'Brosur penawaran material dari toko bangunan',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Satuan ukuran apakah yang menjadi standar perhitungan volume pekerjaan pasangan dinding bata atau plesteran pada Bill of Quantities (BOQ)?',
+                    'opsi_a' => 'Meter Persegi (m²)',
+                    'opsi_b' => 'Kilometer (km)',
+                    'opsi_c' => 'Liter (L)',
+                    'opsi_d' => 'Watt (W)',
+                    'jawaban_benar' => 'A',
+                ],
+                [
+                    'pertanyaan' => 'Dokumen tertulis apakah yang mendampingi gambar kerja DED untuk menjelaskan syarat mutu material dan tata cara pelaksanaan teknis pekerjaan?',
+                    'opsi_a' => 'RKS (Rencana Kerja dan Syarat-Syarat) / Spesifikasi Teknis',
+                    'opsi_b' => 'Kartu Nama Arsitek',
+                    'opsi_c' => 'Kwitansi Pembelian Kertas',
+                    'opsi_d' => 'Daftar Hadir Rapat Mingguan',
+                    'jawaban_benar' => 'A',
+                ],
+            ];
+        }
+
         // Default: AutoCAD 2D / 3D / DED Engineering Standard (10 Questions)
         return [
             [
