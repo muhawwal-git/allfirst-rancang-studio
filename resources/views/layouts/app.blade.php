@@ -59,7 +59,7 @@
     <!-- Global Footer -->
     @include('layouts.footer')
 
-    @unless(request()->routeIs('student.classroom', 'student.quiz.*', 'login', 'register', 'password.*', 'student.sertifikat.show'))
+    @unless(request()->routeIs('student.classroom', 'student.quiz.*', 'login', 'register', 'password.*', 'verification.*', 'student.sertifikat.show'))
         <!-- Floating WhatsApp Button (Bottom Right) -->
         <a href="https://wa.me/{{ \App\Models\PengaturanSitus::getAdminWhatsapp() }}?text={{ urlencode('Halo Admin Allfirst Rancang Studio, saya ingin konsultasi mengenai program pelatihan.') }}"
            target="_blank"

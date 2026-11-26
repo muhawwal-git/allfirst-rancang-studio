@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminQuizController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\AdminTestimoniController;
 use App\Http\Controllers\Admin\AdminTransaksiController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -54,24 +55,37 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/keluar', [LoginController::class, 'destroy'])->name('logout');
 
-    // Checkout & Payment
-    Route::get('/checkout/{kelas:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
-    Route::post('/checkout/{kelas:slug}', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('/transaksi/{transaksi:nomor_invoice}', [TransaksiController::class, 'show'])->name('transaksi.show');
-    Route::post('/transaksi/{transaksi:nomor_invoice}/upload-bukti', [TransaksiController::class, 'uploadBukti'])->name('transaksi.upload');
+    // Email Verification Routes
+    Route::get('/verifikasi-email', [EmailVerificationController::class, 'notice'])
+        ->name('verification.notice');
+    Route::get('/verifikasi-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+    Route::post('/verifikasi-email/kirim-ulang', [EmailVerificationController::class, 'send'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
 
-    // Student Dashboard & Classroom
-    Route::get('/student/dashboard', StudentDashboardController::class)->name('student.dashboard');
-    Route::get('/student/kelas/{kelas:slug}/belajar/{materi?}', [ClassroomController::class, 'show'])->name('student.classroom');
-    Route::get('/student/kelas/{kelas:slug}/materi/{materi}/stream', [ClassroomController::class, 'stream'])->name('student.materi.stream');
-    Route::post('/student/materi/{materi}/progress', [ClassroomController::class, 'saveProgress'])->name('student.materi.progress');
-    Route::post('/student/materi/{materi}/complete', [ClassroomController::class, 'markComplete'])->name('student.materi.complete');
-    Route::get('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'show'])->name('student.quiz.show');
-    Route::post('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz.submit');
-    Route::post('/student/kelas/{kelas:slug}/testimoni', [StudentQuizController::class, 'submitTestimoni'])->name('student.quiz.testimoni');
-    Route::get('/student/sertifikat/{sertifikat}', [SertifikatController::class, 'show'])
-        ->where('sertifikat', '.*')
-        ->name('student.sertifikat.show');
+    // Verified Authenticated Routes
+    Route::middleware('verified')->group(function () {
+        // Checkout & Payment
+        Route::get('/checkout/{kelas:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
+        Route::post('/checkout/{kelas:slug}', [CheckoutController::class, 'store'])->name('checkout.store');
+        Route::get('/transaksi/{transaksi:nomor_invoice}', [TransaksiController::class, 'show'])->name('transaksi.show');
+        Route::post('/transaksi/{transaksi:nomor_invoice}/upload-bukti', [TransaksiController::class, 'uploadBukti'])->name('transaksi.upload');
+
+        // Student Dashboard & Classroom
+        Route::get('/student/dashboard', StudentDashboardController::class)->name('student.dashboard');
+        Route::get('/student/kelas/{kelas:slug}/belajar/{materi?}', [ClassroomController::class, 'show'])->name('student.classroom');
+        Route::get('/student/kelas/{kelas:slug}/materi/{materi}/stream', [ClassroomController::class, 'stream'])->name('student.materi.stream');
+        Route::post('/student/materi/{materi}/progress', [ClassroomController::class, 'saveProgress'])->name('student.materi.progress');
+        Route::post('/student/materi/{materi}/complete', [ClassroomController::class, 'markComplete'])->name('student.materi.complete');
+        Route::get('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'show'])->name('student.quiz.show');
+        Route::post('/student/kelas/{kelas:slug}/quiz', [StudentQuizController::class, 'submitQuiz'])->name('student.quiz.submit');
+        Route::post('/student/kelas/{kelas:slug}/testimoni', [StudentQuizController::class, 'submitTestimoni'])->name('student.quiz.testimoni');
+        Route::get('/student/sertifikat/{sertifikat}', [SertifikatController::class, 'show'])
+            ->where('sertifikat', '.*')
+            ->name('student.sertifikat.show');
+    });
 });
 
 // Admin Area Protected with 'admin' middleware

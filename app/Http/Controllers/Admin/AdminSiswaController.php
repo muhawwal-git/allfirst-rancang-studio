@@ -158,8 +158,8 @@ class AdminSiswaController extends Controller
                 'role' => 'student',
                 'status_profesi' => ($validated['status_profesi'] ?? null) ?: 'Peserta Studio',
                 'instansi_asal' => ($validated['instansi_asal'] ?? null) ?: 'Allfirst Rancang Studio Makassar',
-                'email_verified_at' => now(),
             ]);
+            $user->markEmailAsVerified();
         } else {
             $user->update([
                 'name' => $validated['name'],

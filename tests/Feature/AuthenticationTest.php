@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -65,6 +67,8 @@ class AuthenticationTest extends TestCase
 
     public function test_new_users_can_register_with_allfirst_fields(): void
     {
+        Notification::fake();
+
         $response = $this->post(route('register.store'), [
             'name' => 'Dimas Prakoso, S.T.',
             'email' => 'dimas@example.com',
@@ -76,7 +80,11 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('verification.notice'));
+
+        $user = User::query()->where('email', 'dimas@example.com')->firstOrFail();
+        $this->assertNull($user->email_verified_at);
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
 
         $this->assertDatabaseHas('users', [
             'name' => 'Dimas Prakoso, S.T.',

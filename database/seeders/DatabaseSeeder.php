@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         PengaturanSitus::setValue('rekening_nomor', '1234567890');
         PengaturanSitus::setValue('rekening_atas_nama', 'Allfirst Rancang Studio');
 
-        User::query()->updateOrCreate(
+        $admin = User::query()->updateOrCreate(
             ['email' => 'allfirst.go@gmail.com'],
             [
                 'name' => 'Asrul (Admin Allfirst Studio)',
@@ -43,9 +43,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin',
                 'status_profesi' => 'Founder & Lead Instructor',
                 'instansi_asal' => 'Allfirst Rancang Studio Makassar',
-                'email_verified_at' => now(),
             ]
         );
+        $admin->markEmailAsVerified();
 
         $budi = User::query()->updateOrCreate(
             ['email' => 'budi@student.id'],
@@ -56,9 +56,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
                 'status_profesi' => 'Mahasiswa / Pelajar',
                 'instansi_asal' => 'Universitas Hasanuddin',
-                'email_verified_at' => now(),
             ]
         );
+        $budi->markEmailAsVerified();
 
         $coursesData = [
             [
@@ -317,9 +317,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
                 'status_profesi' => 'Arsitek / Drafter / Karyawan Swasta',
                 'instansi_asal' => 'Studio Rancang Utama',
-                'email_verified_at' => now(),
             ]
         );
+        $alumni->markEmailAsVerified();
 
         $txAlumni = Transaksi::query()->updateOrCreate(
             ['nomor_invoice' => 'ARS-INV-ALUMNI-01'],
@@ -374,9 +374,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
                 'status_profesi' => 'Mahasiswa Teknik Sipil / Drafter',
                 'instansi_asal' => 'Universitas Hasanuddin Makassar',
-                'email_verified_at' => now(),
             ]
         );
+        $siswaOffline->markEmailAsVerified();
 
         $txOffline = Transaksi::query()->updateOrCreate(
             ['nomor_invoice' => 'ARS-OFF-STUDIO-01'],

@@ -40,8 +40,15 @@ class LoginController extends Controller
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
 
+        $user = $request->user();
+
+        if ($user && ! $user->isAdmin() && ! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice')
+                ->with('status', 'Silakan verifikasi alamat email Anda terlebih dahulu sebelum masuk ke dashboard.');
+        }
+
         return redirect()->intended(route('home'))
-            ->with('status', 'Selamat datang kembali, '.$request->user()->name.'!');
+            ->with('status', 'Selamat datang kembali, '.$user->name.'!');
     }
 
     public function destroy(Request $request): RedirectResponse
